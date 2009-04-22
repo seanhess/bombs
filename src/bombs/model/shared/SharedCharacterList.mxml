@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<events:EventDispatcher xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:rtc="AfcsNameSpace" xmlns:events="flash.events.*">
+
+	
+	<mx:Script>
+		<![CDATA[
+			import bombs.model.Character;
+			import mx.events.CollectionEventKind;
+			import mx.events.CollectionEvent;
+			import mx.collections.IList;
+			
+			[Bindable] public var characters:IList;
+			
+			public function init(characters:IList):void
+			{
+				this.characters = characters;
+				characters.addEventListener(CollectionEvent.COLLECTION_CHANGE, onAppListChange);
+
+				list = new SharedCollection();
+				list.connectSession = session;
+			}
+			
+			/**
+			 * For now we'll only listen for when an item is added
+			 */
+			private function onAppListChange(event:CollectionEvent):void
+			{
+				if (event.kind == CollectionEvent.ADD)
+				{
+					var char:Character = event.items[0] as Character;
+					list.addItem(char.name);
+				}
+			} 
+			
+			/**
+			 * Listen for when items are removed or added .
+			 * 
+			 * Syncing is more difficult than just calling, because
+			 * you can't do the --- add in one place, let you update
+			 * yourself thing.. 
+			 * 
+			 * Well, wouldn't it make more sense to declare these as
+			 * extensions of SharedCollection or whatever?
+			 * 
+			 * No, because you CAN'T share the full object... :(
+			 * 
+			 * So what if I COULD share the full object, would it make
+			 * more sense to have the full thing there?
+			 * 
+			 * Well, this goes back to the whole model adaption I was talking about before
+			 * 
+			 * Assume the server stores a list of books. 
+			 * 	
+			 * So, according to my model, I should use a service to update this.. 
+			 * 
+			 * 
+			 * But I might have ANY NUMBER of services that need to respond when
+			 * the controller does something. 
+			 * 
+			 * That's the problem... Maybe on "CREATE NEW BOOK" I want to store it in
+			 * the database, and notify all the other peeps in the program to fetch
+			 * the new books. 
+			 * 
+			 * It doesn't make much sense then, to have the controller updating the model
+			 * directly, because that means he has to know how the model works. 
+			 * 
+			 * He doesn't want to know how the model works. He wants to manipulate application
+			 * state. 
+			 * 
+			 * maybe he doesn't know how they work, but is he responsible for telling
+			 * them what to do?... that's a big deal!
+			 * 
+			 * So, it might be like. 
+			 *  joinGame()
+			 *    server.addCharacter(character)
+			 *    messaging.everybodyFetchCharacters();
+			 * 
+			 * 
+			 * If you do it that way, the controllers AREN'T finally responsible. 
+			 * 
+			 * 
+			 * 
+			 * The other option:
+			 * 
+			 *  joinGame() - as a system event
+			 *  
+			 *  anyone interested can respond to it... 
+			 * 
+			 * 
+			 * SharedCollection sucks. 
+			 * 
+			 * SharedProperty is awesome and easy to use. 
+			 * 
+			 * I need to rewrite SharedCollection. To use dictionaries
+			 * and stuff. 
+			 */
+			private function onServerListChange(event:CollectionEvent):void
+			{
+				if (event.kind == CollectionEvent.ADD)
+				{
+					// only if it's not already there! // 
+					characters.addItem(findCharacter(event.items[0])); 
+				}
+				
+				else if (event.kind == CollectionEvent.REMOVE)
+				{
+					
+				}
+			}
+			
+			/**
+			 * Creates a new character object, or returns the main
+			 * character if it matches the one we already have.
+			 * 
+			 * Creates a shared character for them to set them up
+			 */
+			private function findCharacter(name:String):Character
+			{
+				var character:Character;
+				
+				if (mainCharacter && name == mainCharacter.name)
+					character = mainCharacter;
+				
+				else
+				{
+					character = new Character();
+					character.name = name;					
+				}
+					
+				var shared:SharedCharacter = new SharedCharacter();
+					shared.init(this.session, character);
+					
+				sharedCharacters[character] = shared;
+					
+				return character;
+			}
+		]]>
+	</mx:Script>
+	
+	<rtc:SharedCollection id="list" 
+		connectSession="{session}"
+		sharedID="characters" 
+		idField="name"
+		collectionChange="onServerListChange(event)"
+	/>
+
+</events:EventDispatcher>

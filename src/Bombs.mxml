@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" 
+	creationComplete="initializeApp()"
+	xmlns:control="bombs.control.*" xmlns:view="bombs.view.*">
+	
+	
+	<mx:Script>
+		<![CDATA[
+			private function initializeApp():void
+			{
+				sharing.connect();
+			}
+		]]>
+	</mx:Script>
+	
+	<!-- CONTROLLERS -->
+	<control:Sharing id="sharing"
+		mainCharacter="{game.mainCharacter}"
+		addChar="main.game.characters.addCharacter(sharing.character)"
+		removeChar="main.game.characters.removeCharacter(sharing.character)"
+	/>
+	
+	<control:Game id="game" 
+		characters="{sharing.characters}"
+		updateChar="sharing.updateChar()"
+	/>
+	
+	
+	
+	<!-- VIEWS -->
+	<view:MainView id="main"
+		moveCharacter="game.move(event.localX, event.localY)"	
+		showLogin="{!game.playing}"
+	/>
+	
+	<view:Test id="test" 
+		join="game.join(test.sample)"
+	/>
+	
+</mx:Application>

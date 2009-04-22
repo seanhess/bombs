@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Object xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:rtc="AfcsNameSpace">
+	<!-- Syncs a character with the online version of him -->
+	
+	<mx:Script>
+		<![CDATA[
+			import bombs.model.Character;
+		
+			[Bindable] private var character:Character;
+			[Bindable] private var sesssion:IConnectSession;
+			
+			public function init(session:IConnectSession, character:Character):void
+			{
+				this.session = session;
+				this.character = character;
+				property.subscribe();
+			}
+			
+			private function onChange():void
+			{
+				var value:Object = property.value;
+				
+				character.name = value.name;
+				character.locationX = value.locationX;
+				character.locationY = value.locationY;
+				character.destinationX = value.destinationX;
+				character.destinationY = value.destinationY;
+			}
+			
+			public function update():void
+			{
+				property.value = character;
+			}
+		]]>
+	</mx:Script>
+	
+	<rtc:SharedProperty
+		id="property" 
+		connectSession="{sesssion}" 
+		nodeName="{character.name}" 
+		sharedID="characters"
+		change="onChange()"
+	/>
+	
+</mx:Object>

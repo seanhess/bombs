@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:layer="bombs.view.layer.*" xmlns:view="bombs.view.*" width="100%" height="100%" backgroundColor="#FFFFFF">
+	
+	<mx:Metadata>
+		[Event(name="moveCharacter",type="flash.events.MouseEvent")]
+	</mx:Metadata>
+	
+	<mx:Boolean id="showLogin">true</mx:Boolean>
+	
+	<view:GameView id="game"/>
+	
+	<view:LoginView id="login" visible="{showLogin}"/>
+		
+</mx:Canvas>
