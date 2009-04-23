@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<events:EventDispatcher xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:events="flash.events.*" xmlns:ns="AfcsNameSpace" xmlns:adapt="bombs.adapt.*" xmlns:shared="bombs.model.shared.*">
+<events:EventDispatcher xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:events="flash.events.*" xmlns:ns="AfcsNameSpace" xmlns:adapt="bombs.adapt.*" xmlns:shared="bombs.model.shared.*" xmlns:model="bombs.model.*" xmlns:util="bombs.util.*">
 
 	<mx:Script>
 		<![CDATA[
+			import bombs.model.Bomb;
+			import bombs.util.SimpleListEvent;
 			import com.adobe.rtc.sharedModel.SharedProperty;
 			import com.adobe.rtc.events.SharedPropertyEvent;
-			import bombs.model.Game;
 			import bombs.model.Character;
 			import mx.events.CollectionEventKind;
 			import mx.events.CollectionEvent;
@@ -17,41 +18,25 @@
 			
 			[Bindable] public var playing:Boolean = false;
 			[Bindable] public var mainCharacter:Character;
-			[Bindable] public var game:Game = new Game();
-
-			/**
-			 * All the shared properties for the characters, 
-			 * referenced by name
-			 */
-			private var characterProperties:Dictionary;
-			
-			/**
-			 * All the characters, referenced by name
-			 */
-			private var characters:Dictionary;
 			
 			public function connect():void
 			{
-				characterProperties = new Dictionary(true);
-				characters = new Dictionary(true);
 				session.login();
-				characterList.subscribe();
+				characters.subscribe();
+				bombsList.subscribe();
 			}
 			
-			/**			
-			 * Removes everything on the server
-			 */
 			public function nuke():void
 			{
-				characterList.removeAll();
+				characters.removeAll();
+				bombsList.removeAll();
 			}
-
 			
 			public function joinGame(character:Character):void
 			{
 				mainCharacter = character;
-				characterList.addItem({name:character.name});
 				playing = true;
+				update();
 			}
 			
 			public function startPlaying():void
@@ -71,92 +56,38 @@
 			 */
 			public function update():void
 			{
-				characterProperties[mainCharacter.name].value = mainCharacter;
+				characters.share(mainCharacter);
 			}
 			
-			public function layone(x:int, y:int):void
+			public function lay():void
 			{
-				
-			}
-			
-			
-			
-
-
-
-
-
-
-						
-			private function onCharactersChange(event:CollectionEvent):void
-			{
-				if (event.kind == CollectionEventKind.ADD)
-				{
-					var character:Character = createCharacter(event.items[0].name);
-					game.addCharacter(character);
-				}
-				
-				else if (event.kind == CollectionEventKind.REMOVE)
-				{
-					game.removeCharacter(event.items[0].name);
-					removeCharacter(event.items[0].name);
-				}
-			}
-			
-			private function createCharacter(name:String):Character
-			{
-				var character:Character;
-				
-				if (mainCharacter && name == mainCharacter.name)
-				{
-					character = mainCharacter;
-				}
-				else
-				{
-					character = new Character();
-					character.name = name;
-				}
-						
-				var shared:SharedProperty = new SharedProperty();
-					shared.sharedID = "characters";
-					shared.nodeName = name;
-					shared.connectSession = this.session;
-					shared.subscribe(); // don't want to set the value just yet, right? 
+				var bomb:Bomb = new Bomb();
+					bomb.locationX = mainCharacter.locationX;
+					bomb.locationY = mainCharacter.locationY;
 					
-					shared.addEventListener(SharedPropertyEvent.CHANGE, onCharacterUpdate);
-					
-				characterProperties[name] = shared;
-				characters[name] = character;
-				
-				return character;
+				bombsList.share(bomb);
 			}
 			
-			private function removeCharacter(name:String):void
+			protected function updateChar(event:SimpleListEvent):void
 			{
-				var shared:SharedProperty = characterProperties[name];
-					shared.removeEventListener(SharedPropertyEvent.CHANGE, onCharacterUpdate);
-					shared.close();
+				var char:Character = event.item as Character;
+				var update:Object = event.update;
 				
-				delete characterProperties[name];
+				char.destinationX = update.destinationX;
+				char.destinationY = update.destinationY;
+				
+				if (mainCharacter && char.name == mainCharacter.name)
+					mainCharacter = char;
 			}
 			
-			private function onCharacterUpdate(event:SharedPropertyEvent):void
+			protected function updateBomb(event:SimpleListEvent):void
 			{
-				var name:String = (event.target as SharedProperty).nodeName;
-				var prop:SharedProperty = (event.target as SharedProperty);
-				var char:Character = characters[name];
+				var bomb:Bomb = event.item as Bomb;
+				var update:Object = event.update;
 				
-				var value:Object = prop.value;
-				
-				char.destinationX = value.destinationX;
-				char.destinationY = value.destinationY;
-				
-				trace("(" + name + ") -> " + char.destinationX + " " + char.destinationY);
+				bomb.locationX = update.locationX;
+				bomb.locationY = update.locationY;
 			}
-			
-			
-			
-			
 		]]>
 	</mx:Script>
 
@@ -167,12 +98,20 @@
 	<ns:ConnectSession id="session" authenticator="{auth}" roomURL="{ROOM}"/>
 	
 	<!-- Sharing -->
-	<ns:SharedCollection id="characterList" 
-		connectSession="{session}"
-		sharedID="lists"
-		nodeName="characters"
-		idField="name" 
-		collectionChange="onCharactersChange(event)"
+	<util:SimpleSharedList id="characters" 
+		session="{session}" 
+		idField="name"
+		itemType="{Character}"
+		sharedID="characters"
+		receive="updateChar(event)"
+	/>
+	
+	<util:SimpleSharedList id="bombsList" 
+		session="{session}" 
+		idField="id"
+		itemType="{Bomb}"
+		sharedID="bombs"
+		receive="updateBomb(event)"
 	/>
 
 </events:EventDispatcher>

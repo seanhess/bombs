@@ -16,8 +16,11 @@ package bombs.model
 		public var name:String;
 		
 		// Where are we going?
-		// This also tells us the last place we'd expect them to be
 		public var destinationX:int = -1;
 		public var destinationY:int = -1;
+		
+		// these values are not shared.. only used on the client to know where to lay bombs
+		public var locationX:int = -1;
+		public var locationY:int = -1;
 	}
 }

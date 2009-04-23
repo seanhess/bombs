@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	width="10" height="10" 
+	backgroundColor="#FF0000"
+	x="{bomb.locationX}"
+	y="{bomb.locationY}"
+	>
+	
+	<mx:Script>
+		<![CDATA[
+			import bombs.model.Bomb;
+			[Bindable] public var bomb:Bomb;
+			
+			override public function set data(value:Object):void
+			{
+				super.data = value;
+				bomb = value as Bomb;
+			}
+			// also needs to set a timer for when it goes off (or something)
+		]]>
+	</mx:Script>
+		
+</mx:VBox>

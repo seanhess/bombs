@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" width="100" height="100" backgroundColor="#000000">
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+	width="100" height="100" 
+	x="{char.locationX}"
+	y="{char.locationY}"
+	backgroundColor="#000000"
+	>
 	
 	<mx:Label horizontalCenter="0" verticalCenter="0" color="#FFFFFF" text="{char.name}"/>
 	
@@ -31,17 +36,16 @@
 					
 					moveChar.pause();
 					
-					animateX.fromValue = this.x;
+					animateX.fromValue = char.locationX;
 					animateX.toValue = char.destinationX;
 					
-					animateY.fromValue = this.y;
+					animateY.fromValue = char.locationY;
 					animateY.toValue = char.destinationY;
 					
 					moveChar.play();
 				}				
 			}
 
-			// Update the server with my location once I'm done moving. 			
 			private function onMoved():void
 			{
 				return;
@@ -52,9 +56,9 @@
 	<mx:Binding source="char.destinationX" destination="dest"/>
 	<mx:Binding source="char.destinationY" destination="dest"/>
 		
-	<mx:Parallel id="moveChar" target="{this}" effectEnd="onMoved()">
-		<mx:AnimateProperty id="animateX" property="x"/>
-		<mx:AnimateProperty id="animateY" property="y"/>
+	<mx:Parallel id="moveChar" target="{char}" effectEnd="onMoved()">
+		<mx:AnimateProperty id="animateX" property="locationX"/>
+		<mx:AnimateProperty id="animateY" property="locationY"/>
 	</mx:Parallel>
 	
 </mx:VBox>

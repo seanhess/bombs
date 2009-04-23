@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--- This class is a replacement for list. It just adds a renderer whenever it gets
+ a notification of a new item and removes it whenever it is deleted
+-->
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" xmlns:model="bombs.model.*">
+	
+	<mx:Script>
+		<![CDATA[
+			import bombs.util.SimpleListEvent;
+			import mx.collections.ItemResponder;
+			import bombs.view.render.CharacterRenderer;
+			import bombs.model.Character;
+			import mx.collections.IList;
+			
+			private var renderers:Dictionary = new Dictionary(true);
+			
+			public var idField:String = "name";
+			public var itemRenderer:Class;
+			
+			[Bindable]
+			public function set list(value:IEventDispatcher):void
+			{
+				_list = value;
+				value.addEventListener(SimpleListEvent.ADD, onAdd);
+				value.addEventListener(SimpleListEvent.REMOVE, onRemove);
+			}
+			
+			public function get list():IEventDispatcher
+			{
+				return _list;
+			}
+			
+			protected var _list:IEventDispatcher;
+			
+			protected function onAdd(event:SimpleListEvent):void
+			{
+				addChild(createRenderer(event.item));
+			}
+			
+			protected function onRemove(event:SimpleListEvent):void
+			{
+				var renderer:DisplayObject = getRenderer(event.item);
+				removeChild(renderer);
+				delete renderers[getItemID(event.item)];
+			}
+			
+			private function createRenderer(item:*):DisplayObject
+			{
+				var renderer:DisplayObject = new itemRenderer();
+					renderer["data"] = item;
+					
+				renderers[getItemID(item)] = renderer;
+				return renderer;
+			}
+			
+			protected function getItemID(item:*):String
+			{
+				return item[idField]; 
+			}
+			
+			protected function getRenderer(item:*):*
+			{
+				return renderers[getItemID(item)];
+			}
+		]]>
+	</mx:Script>
+	
+</mx:Canvas>

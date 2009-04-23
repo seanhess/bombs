@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml" right="0" xmlns:model="bombs.model.*">
+<mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml" right="0" xmlns:model="bombs.model.*" visible="{!playing}">
 	
 	<mx:Metadata>
 		[Event(name="join",type="flash.events.Event")]	
@@ -7,6 +7,7 @@
 		[Event(name="play",type="flash.events.Event")]	
 	</mx:Metadata>
 		
+	<mx:Boolean id="playing"/>
 		
 	<mx:TextInput id="nameField"/>
 	<model:Character id="sample" name="{nameField.text}"/>

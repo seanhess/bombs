@@ -1,9 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" backgroundColor="#FFFFFF" 
-	xmlns:layer="bombs.view.layer.*" 
-	click="dispatchEvent(new MouseEvent('moveCharacter',true, false, this.mouseX, this.mouseY))"
+	xmlns:layer="bombs.view.layer.*"
+	click="onClick(event)"
 	>
+	<mx:Script>
+		<![CDATA[
+			import bombs.view.render.BombRenderer;
+			import bombs.view.render.CharacterRenderer;
+			
+			[Bindable] public var playing:Boolean;
+			
+			/**
+			 * Why the heck can I never get a handle on the stage 
+			 * from within this component?
+			 */
+			public function setStage(value:Stage):void
+			{
+				stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+			}
+			
+			private function onClick(event:MouseEvent):void
+			{
+				dispatchEvent(new MouseEvent('moveCharacter',true, false, this.mouseX, this.mouseY))
+			}
+			
+			// well, really I should be listening on the system manager or something.. 
+			private function onKeyDown(event:KeyboardEvent):void
+			{
+				if (playing && event.keyCode == Keyboard.SPACE)
+				{
+					dispatchEvent(new Event("layBomb", true));
+				}
+			}
+		]]>
+	</mx:Script>
 	
-	<layer:CharactersLayer id="characters"/>
+	<layer:Layer id="bombs" itemRenderer="{BombRenderer}" idField="id"/>
+	<layer:Layer id="characters" itemRenderer="{CharacterRenderer}" idField="name"/>
 	
 </mx:Canvas>

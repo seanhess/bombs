@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" 
 	creationComplete="initializeApp()"
-	xmlns:control="bombs.control.*" xmlns:view="bombs.view.*">
-	
+	xmlns:control="bombs.control.*" xmlns:view="bombs.view.*"
+	applicationComplete="onAppComplete()"
+	>
 	
 	<mx:Script>
 		<![CDATA[
 			private function initializeApp():void
 			{
 				control.connect();
+			}
+			
+			private function onAppComplete():void
+			{
+				main.game.setStage(this.stage);
 			}
 		]]>
 	</mx:Script>
@@ -18,7 +24,8 @@
 	
 	<!-- VIEWS -->
 	<view:MainView id="main"
-		moveCharacter="control.move(event.localX, event.localY)"	
+		moveCharacter="control.move(event.localX, event.localY)"
+		layBomb="control.lay()"	
 		showLogin="{!control.playing}"
 	/>
 	
@@ -29,6 +36,10 @@
 	/>
 	
 	<!-- Injection -->
-	<mx:Binding source="control.game" destination="main.game.characters.game"/>
+	<mx:Binding source="control.characters" destination="main.game.characters.list"/>
+	<mx:Binding source="control.bombsList" destination="main.game.bombs.list"/>
 	
+	<mx:Binding source="control.playing" destination="main.game.playing"/>
+	<mx:Binding source="control.playing" destination="test.playing"/>
+
 </mx:Application>
