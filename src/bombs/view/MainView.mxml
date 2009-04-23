@@ -11,16 +11,20 @@
 	
 	<mx:Image source="assets/image/stripes.jpg" width="100%" height="100%" maintainAspectRatio="false"/>
 	
-	<mx:Canvas width="800" height="600" 
-		borderStyle="solid" borderThickness="10" 
-		backgroundColor="#FFFFFF" 
-		horizontalCenter="0" verticalCenter="0"
-		horizontalScrollPolicy="off" verticalScrollPolicy="off"
-		>
-		
-		<view:GameView id="game"/>
-		<view:LoginView id="login" visible="{showLogin}"/>
-		
+	<mx:Canvas horizontalCenter="0" verticalCenter="0" width="1000" height="800" horizontalScrollPolicy="off" verticalScrollPolicy="off">
+		<mx:Canvas width="80%" height="80%" 
+			borderStyle="solid" borderThickness="10" 
+			backgroundColor="#FFFFFF" 
+			horizontalScrollPolicy="off" verticalScrollPolicy="off"
+			horizontalCenter="0" verticalCenter="0" 
+			>
+			
+			<view:GameView id="game"/>
+			<view:LoginView id="login" visible="{showLogin}"/>
+			
+		</mx:Canvas>
+		<mx:Image source="assets/image/logo_flat.png"/>
 	</mx:Canvas>
-		
+	
+				
 </mx:Canvas>

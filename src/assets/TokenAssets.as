@@ -37,15 +37,14 @@ package assets
 		public static const TIMER:Class;
 		
 
+		// If I embed these guys from the swf, they will scale perfectly, right? 
+		// Hmm..... I should try it // 
 
 
-		
+
 		// BOMBS // 
 		[Embed("/assets/image/bomb_flat_small.png")]
 		public static const BOMB:Class;
-		
-		[Embed("/assets/image/explosion_small.png")]
-		public static const EXPLOSION:Class;
 		
 		[Embed("/assets/image/explosion_small.png")]
 		public static const EXPLOSION:Class;
