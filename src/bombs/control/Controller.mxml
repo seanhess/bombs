@@ -65,6 +65,11 @@
 			
 			public function lay():void
 			{
+				if (mainCharacter.bombs < 1)
+					return;
+				
+				mainCharacter.bombs--;
+				
 				var bomb:Bomb = new Bomb();
 					bomb.locationX = mainCharacter.locationX;
 					bomb.locationY = mainCharacter.locationY;
@@ -125,8 +130,13 @@
 						{
 							char.dead = true;
 							characters.remove(char);
+							mainCharacter.kills++;
 						}
 					}
+					
+					mainCharacter.bombs++;
+					
+					update(); // tell everybody about your kills!
 				}
 				
 				bombsList.remove(bomb); // so, EVERYONE is removing the bombs redundantly

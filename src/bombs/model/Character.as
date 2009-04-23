@@ -27,6 +27,10 @@ package bombs.model
 		
 		public var dead:Boolean = false;
 		
+		public var bombs:int = 1;
+		
+		public var kills:int = 0;
+		
 		public function get space():Rectangle
 		{
 			return new Rectangle(locationX - radius, locationY - radius, 2*radius, 2*radius);
