@@ -3,6 +3,7 @@
 
 	<mx:Script>
 		<![CDATA[
+			import bombs.util.BombTimer;
 			import bombs.model.Bomb;
 			import bombs.util.SimpleListEvent;
 			import com.adobe.rtc.sharedModel.SharedProperty;
@@ -80,6 +81,12 @@
 					mainCharacter = char;
 			}
 			
+			/**
+			 * This should only be called when a bomb is created
+			 * since we never update them.
+			 * 
+			 * Hmm... need some way to clean up the bombs.
+			 */
 			protected function updateBomb(event:SimpleListEvent):void
 			{
 				var bomb:Bomb = event.item as Bomb;
@@ -87,7 +94,18 @@
 				
 				bomb.locationX = update.locationX;
 				bomb.locationY = update.locationY;
+				
+				var timer:BombTimer = new BombTimer();
+					timer.countDown(bomb);
+					timer.addEventListener(BombTimer.EXPLODE, onExplode);
 			}
+			
+			protected function onExplode(event:Event):void
+			{
+				var timer:BombTimer = event.target as BombTimer;
+				trace("EXPLODED: " + timer.bomb.locationX + " :: " + timer.bomb.locationY);
+			}
+			
 		]]>
 	</mx:Script>
 

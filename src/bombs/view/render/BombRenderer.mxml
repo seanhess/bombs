@@ -17,8 +17,18 @@
 				super.data = value;
 				bomb = value as Bomb;
 			}
-			// also needs to set a timer for when it goes off (or something)
+			
+			private function set exploded(value:Boolean):void
+			{
+				if (value)
+				{
+					width = 100;
+					height = 100;
+				}
+			}
 		]]>
 	</mx:Script>
+	
+	<mx:Binding source="bomb.exploded" destination="exploded"/>
 		
 </mx:VBox>
