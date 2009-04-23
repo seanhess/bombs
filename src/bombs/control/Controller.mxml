@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<events:EventDispatcher xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:events="flash.events.*" xmlns:ns="AfcsNameSpace" xmlns:adapt="bombs.adapt.*" xmlns:shared="bombs.model.shared.*">
+
+	<mx:Script>
+		<![CDATA[
+			import com.adobe.rtc.sharedModel.SharedProperty;
+			import com.adobe.rtc.events.SharedPropertyEvent;
+			import bombs.model.Game;
+			import bombs.model.Character;
+			import mx.events.CollectionEventKind;
+			import mx.events.CollectionEvent;
+			
+			// CONSTS // 
+			public static const ROOM:String = "http://connectnow.acrobat.com/seanhessnet/game2";
+			public static const USER:String = "seanhess@gmail.com";
+			public static const PASS:String = "cocomo";
+			
+			[Bindable] public var playing:Boolean = false;
+			[Bindable] public var mainCharacter:Character;
+			[Bindable] public var game:Game = new Game();
+
+			/**
+			 * All the shared properties for the characters, 
+			 * referenced by name
+			 */
+			private var characterProperties:Dictionary;
+			
+			/**
+			 * All the characters, referenced by name
+			 */
+			private var characters:Dictionary;
+			
+			public function connect():void
+			{
+				characterProperties = new Dictionary(true);
+				characters = new Dictionary(true);
+				session.login();
+				characterList.subscribe();
+			}
+			
+			/**			
+			 * Removes everything on the server
+			 */
+			public function nuke():void
+			{
+				characterList.removeAll();
+			}
+
+			
+			public function joinGame(character:Character):void
+			{
+				mainCharacter = character;
+				characterList.addItem({name:character.name});
+				playing = true;
+			}
+			
+			public function startPlaying():void
+			{
+				playing = true;
+			}
+			
+			public function move(x:int, y:int):void
+			{
+				mainCharacter.destinationX = x;
+				mainCharacter.destinationY = y;
+				update();	
+			}
+			
+			/**
+			 * updates the main char on the server
+			 */
+			public function update():void
+			{
+				characterProperties[mainCharacter.name].value = mainCharacter;
+			}
+			
+			public function layone(x:int, y:int):void
+			{
+				
+			}
+			
+			
+			
+
+
+
+
+
+
+						
+			private function onCharactersChange(event:CollectionEvent):void
+			{
+				if (event.kind == CollectionEventKind.ADD)
+				{
+					var character:Character = createCharacter(event.items[0].name);
+					game.addCharacter(character);
+				}
+				
+				else if (event.kind == CollectionEventKind.REMOVE)
+				{
+					game.removeCharacter(event.items[0].name);
+					removeCharacter(event.items[0].name);
+				}
+			}
+			
+			private function createCharacter(name:String):Character
+			{
+				var character:Character;
+				
+				if (mainCharacter && name == mainCharacter.name)
+				{
+					character = mainCharacter;
+				}
+				else
+				{
+					character = new Character();
+					character.name = name;
+				}
+						
+				var shared:SharedProperty = new SharedProperty();
+					shared.sharedID = "characters";
+					shared.nodeName = name;
+					shared.connectSession = this.session;
+					shared.subscribe(); // don't want to set the value just yet, right? 
+					
+					shared.addEventListener(SharedPropertyEvent.CHANGE, onCharacterUpdate);
+					
+				characterProperties[name] = shared;
+				characters[name] = character;
+				
+				return character;
+			}
+			
+			private function removeCharacter(name:String):void
+			{
+				var shared:SharedProperty = characterProperties[name];
+					shared.removeEventListener(SharedPropertyEvent.CHANGE, onCharacterUpdate);
+					shared.close();
+				
+				delete characterProperties[name];
+			}
+			
+			private function onCharacterUpdate(event:SharedPropertyEvent):void
+			{
+				var name:String = (event.target as SharedProperty).nodeName;
+				var prop:SharedProperty = (event.target as SharedProperty);
+				var char:Character = characters[name];
+				
+				var value:Object = prop.value;
+				
+				char.destinationX = value.destinationX;
+				char.destinationY = value.destinationY;
+				
+				trace("(" + name + ") -> " + char.destinationX + " " + char.destinationY);
+			}
+			
+			
+			
+			
+		]]>
+	</mx:Script>
+
+	<!-- Auth -->	
+	<ns:AdobeHSAuthenticator id="auth" userName="{USER}" password="{PASS}"/>
+
+	<!-- Session -->
+	<ns:ConnectSession id="session" authenticator="{auth}" roomURL="{ROOM}"/>
+	
+	<!-- Sharing -->
+	<ns:SharedCollection id="characterList" 
+		connectSession="{session}"
+		sharedID="lists"
+		nodeName="characters"
+		idField="name" 
+		collectionChange="onCharactersChange(event)"
+	/>
+
+</events:EventDispatcher>

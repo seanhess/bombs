@@ -4,10 +4,14 @@
 	<mx:Metadata>
 		[Event(name="join",type="flash.events.Event")]	
 		[Event(name="clear",type="flash.events.Event")]	
+		[Event(name="play",type="flash.events.Event")]	
 	</mx:Metadata>
 		
-	<model:Character id="sample" name="bob" locationX="100" locationY="100"/>
+		
+	<mx:TextInput id="nameField"/>
+	<model:Character id="sample" name="{nameField.text}"/>
 
 	<mx:Button label="Join" click="dispatchEvent(new Event('join'))"/>
 	<mx:Button label="removeAll" click="dispatchEvent(new Event('clear'))"/>
+	<mx:Button label="startPlaying" click="dispatchEvent(new Event('play'))"/>
 </mx:Panel>

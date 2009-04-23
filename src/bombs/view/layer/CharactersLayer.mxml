@@ -1,34 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%">
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" xmlns:model="bombs.model.*">
 	
 	<mx:Script>
 		<![CDATA[
+			import bombs.model.Game;
 			import bombs.view.render.CharacterRenderer;
 			import bombs.model.Character;
 			import mx.collections.IList;
 			
 			private var renderers:Dictionary = new Dictionary(true);
 			
-			public function addCharacter(character:Character):void
+			[Bindable]
+			public function set game(value:Game):void
 			{
-				var renderer:CharacterRenderer = createRenderer(character);
-				renderers[character.name] = renderer;
-				addChild(renderer);
+				_game = value;
+				_game.addEventListener(Game.ADD_CHAR, onAddCharacter);
+				_game.addEventListener(Game.REMOVE_CHAR, onRemoveCharacter);
 			}
 			
-			public function removeCharacter(character:Character):void
+			public function get game():Game
 			{
-				var renderer:CharacterRenderer = renderers[character.name];
-				removeChild(renderer);				
-				delete renderers[character.name];
+				return _game;
+			}
+			
+			private var _game:Game;
+			
+			/**
+			 * Adds the character just added to the game
+			 */
+			public function onAddCharacter(event:Event):void
+			{
+				var character:Character = _game.character;
+				addChild(createRenderer(character));
+			}
+			
+			/**
+			 * Removes the character just removed from the game
+			 */
+			public function onRemoveCharacter(event:Event):void
+			{
+				var renderer:CharacterRenderer = renderers[game.characterName];
+				removeChild(renderer);
+				delete renderers[game.characterName];
 			}
 			
 			private function createRenderer(character:Character):CharacterRenderer
 			{
-				var render:CharacterRenderer = new CharacterRenderer();
-					render.data = character;
+				var renderer:CharacterRenderer = new CharacterRenderer();
+					renderer.data = character;
 					
-				return render;
+				renderers[character.name] = renderer;
+					
+				return renderer;
 			}
 		]]>
 	</mx:Script>

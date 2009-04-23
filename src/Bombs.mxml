@@ -8,33 +8,27 @@
 		<![CDATA[
 			private function initializeApp():void
 			{
-				sharing.connect();
+				control.connect();
 			}
 		]]>
 	</mx:Script>
 	
-	<!-- CONTROLLERS -->
-	<control:Sharing id="sharing"
-		mainCharacter="{game.mainCharacter}"
-		addChar="main.game.characters.addCharacter(sharing.character)"
-		removeChar="main.game.characters.removeCharacter(sharing.character)"
-	/>
-	
-	<control:Game id="game" 
-		characters="{sharing.characters}"
-		updateChar="sharing.updateChar()"
-	/>
-	
-	
+	<!-- CONTROLLER -->
+	<control:Controller id="control"/>
 	
 	<!-- VIEWS -->
 	<view:MainView id="main"
-		moveCharacter="game.move(event.localX, event.localY)"	
-		showLogin="{!game.playing}"
+		moveCharacter="control.move(event.localX, event.localY)"	
+		showLogin="{!control.playing}"
 	/>
 	
 	<view:Test id="test" 
-		join="game.join(test.sample)"
+		join="control.joinGame(test.sample)"
+		play="control.startPlaying()"
+		clear="control.nuke()"
 	/>
+	
+	<!-- Injection -->
+	<mx:Binding source="control.game" destination="main.game.characters.game"/>
 	
 </mx:Application>
