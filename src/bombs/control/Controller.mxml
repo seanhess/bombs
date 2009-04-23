@@ -40,7 +40,7 @@
 			{
 				mainCharacter = character;
 				playing = true;
-				update();
+				characters.add(mainCharacter);
 			}
 			
 			public function startPlaying():void
@@ -63,8 +63,7 @@
 			public function update():void
 			{
 				if (!playing) return;
-				
-				characters.share(mainCharacter);
+				characters.update(mainCharacter);
 			}
 			
 			public function lay():void
@@ -81,7 +80,7 @@
 					bomb.locationY = mainCharacter.locationY;
 					bomb.owner = mainCharacter.name;
 					
-				bombsList.share(bomb);
+				bombsList.add(bomb);
 			}
 			
 			protected function updateChar(event:SimpleListEvent):void
@@ -110,6 +109,8 @@
 			 */
 			protected function updateBomb(event:SimpleListEvent):void
 			{
+				if (!playing) return;
+				
 				var bomb:Bomb = event.item as Bomb;
 				var update:Object = event.update;
 				
@@ -130,12 +131,14 @@
 			 */
 			protected function onExplode(event:Event):void
 			{
+				if (!playing) return;
+				
 				var timer:BombTimer = event.target as BombTimer;
 				timer.removeEventListener(BombTimer.EXPLODE, onExplode);
 
 				var bomb:Bomb = timer.bomb;
 				
-				if (bomb.owner == mainCharacter.name)
+				if (mainCharacter && bomb.owner == mainCharacter.name)
 				{
 					for (var name:String in characters.items)
 					{

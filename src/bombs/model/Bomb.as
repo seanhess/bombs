@@ -9,7 +9,7 @@ package bombs.model
 		public var locationX:int = -1;
 		public var locationY:int = -1;
 		
-		public var blastRadius:int = 20; // in pixels
+		public var blastRadius:int = 100; // in pixels
 		public var fuse:int = 3; // in seconds
 		
 		public var owner:String;

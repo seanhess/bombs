@@ -35,6 +35,6 @@
 	<mx:Binding source="bomb.exploded" destination="exploded"/>
 	
 	<mx:Image id="waiting" source="{TokenAssets.BOMB}" verticalCenter="0" horizontalCenter="0"/>
-	<mx:Image id="explode" source="{TokenAssets.EXPLOSION}" verticalCenter="0" horizontalCenter="0" visible="false" includeInLayout="false"/>
+	<mx:Image id="explode" source="{TokenAssets.EXPLOSION}" width="{2*currentRadius}" height="{2*currentRadius}" verticalCenter="0" horizontalCenter="0" visible="false" includeInLayout="false"/>
 		
 </mx:Canvas>

@@ -56,9 +56,17 @@ package bombs.util
 		}
 		
 		/**
-		 * Either adds or updates the item
+		 * Updates the item (won't happen if it has been retracted
 		 */
-		public function share(item:*):void
+		public function update(item:*):void
+		{
+			var message:MessageItem = new MessageItem(nodeName, null, itemId(item))
+				message.body = item;
+				
+			node.publishItem(message, true);
+		}
+		
+		public function add(item:*):void
 		{
 			var message:MessageItem = new MessageItem(nodeName, null, itemId(item))
 				message.body = item;
