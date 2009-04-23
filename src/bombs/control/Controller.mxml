@@ -50,6 +50,8 @@
 			
 			public function move(x:int, y:int):void
 			{
+				if (!playing) return;
+				
 				mainCharacter.destinationX = x;
 				mainCharacter.destinationY = y;
 				update();	
@@ -60,11 +62,15 @@
 			 */
 			public function update():void
 			{
+				if (!playing) return;
+				
 				characters.share(mainCharacter);
 			}
 			
 			public function lay():void
 			{
+				if (!playing) return;
+								
 				if (mainCharacter.bombs < 1)
 					return;
 				
@@ -83,12 +89,20 @@
 				var char:Character = event.item as Character;
 				var update:Object = event.update;
 				
-				char.destinationX = update.destinationX;
-				char.destinationY = update.destinationY;
+				if (!mainCharacter || char.name != mainCharacter.name)
+				{
+					char.destinationX = update.destinationX;
+					char.destinationY = update.destinationY;
+				}
+				
 				char.radius = update.radius;
+				char.avatar = update.avatar;
 				
 				if (mainCharacter && char.name == mainCharacter.name)
+				{
+					char.avatar = mainCharacter.avatar;
 					mainCharacter = char;
+				}
 			}
 			
 			/**

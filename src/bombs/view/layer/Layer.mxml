@@ -2,7 +2,9 @@
 <!--- This class is a replacement for list. It just adds a renderer whenever it gets
  a notification of a new item and removes it whenever it is deleted
 -->
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" xmlns:model="bombs.model.*">
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" xmlns:model="bombs.model.*"
+	horizontalScrollPolicy="off" verticalScrollPolicy="off"
+	>
 	
 	<mx:Script>
 		<![CDATA[

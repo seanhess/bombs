@@ -2,6 +2,7 @@
 <mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" backgroundColor="#FFFFFF" 
 	xmlns:layer="bombs.view.layer.*"
 	click="onClick(event)"
+	horizontalScrollPolicy="off" verticalScrollPolicy="off"
 	>
 	<mx:Script>
 		<![CDATA[
@@ -35,7 +36,7 @@
 		]]>
 	</mx:Script>
 	
-	<layer:Layer id="bombs" itemRenderer="{BombRenderer}" idField="id"/>
 	<layer:Layer id="characters" itemRenderer="{CharacterRenderer}" idField="name"/>
+	<layer:Layer id="bombs" itemRenderer="{BombRenderer}" idField="id"/>
 	
 </mx:Canvas>

@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:VBox 
+<mx:Canvas 
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
-	width="{currentRadius*2}" height="{currentRadius*2}" 
-	backgroundColor="#FF0000"
 	x="{bomb.locationX - currentRadius}"
 	y="{bomb.locationY - currentRadius}"
+	clipContent="false"
 	>
 	
-	<mx:Number id="currentRadius">6</mx:Number>
+	<mx:Number id="currentRadius">13</mx:Number>
 	
 	<mx:Script>
 		<![CDATA[
 			import bombs.model.Bomb;
+			import assets.TokenAssets;
 			[Bindable] public var bomb:Bomb;
 			
 			override public function set data(value:Object):void
@@ -25,11 +25,16 @@
 				if (value)
 				{
 					currentRadius = bomb.blastRadius;
+					waiting.visible = false;
+					explode.visible = true;
 				}
 			}
 		]]>
 	</mx:Script>
 	
 	<mx:Binding source="bomb.exploded" destination="exploded"/>
+	
+	<mx:Image id="waiting" source="{TokenAssets.BOMB}" verticalCenter="0" horizontalCenter="0"/>
+	<mx:Image id="explode" source="{TokenAssets.EXPLOSION}" verticalCenter="0" horizontalCenter="0" visible="false" includeInLayout="false"/>
 		
-</mx:VBox>
+</mx:Canvas>

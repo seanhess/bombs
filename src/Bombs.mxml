@@ -3,6 +3,8 @@
 	creationComplete="initializeApp()"
 	xmlns:control="bombs.control.*" xmlns:view="bombs.view.*"
 	applicationComplete="onAppComplete()"
+	backgroundColor="#FFFFFF"
+	backgroundGradientColors="[0xFFFFFF, 0xFFFFFF]"
 	>
 	
 	<mx:Script>
@@ -27,12 +29,7 @@
 		moveCharacter="control.move(event.localX, event.localY)"
 		layBomb="control.lay()"	
 		showLogin="{!control.playing}"
-	/>
-	
-	<view:Test id="test" 
-		join="control.joinGame(test.sample)"
-		play="control.startPlaying()"
-		clear="control.nuke()"
+		fight="control.joinGame(main.login.player)"
 	/>
 	
 	<!-- Injection -->
@@ -40,6 +37,9 @@
 	<mx:Binding source="control.bombsList" destination="main.game.bombs.list"/>
 	
 	<mx:Binding source="control.playing" destination="main.game.playing"/>
-	<mx:Binding source="control.playing" destination="test.playing"/>
+	
+	<mx:Binding source="control.session.isSynchronized" destination="main.login.ready"/>
+	
+	
 
 </mx:Application>

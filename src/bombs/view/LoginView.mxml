@@ -1,4 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" backgroundColor="#000000">
-	<mx:Label color="#FFFFFF" text="This is the login view"/>
+<mx:Canvas 		
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:model="bombs.model.*"
+	width="100%" height="100%" backgroundColor="#FFFFFF"
+	showEffect="{new Dissolve()}"
+	hideEffect="{new Dissolve()}"
+	>
+	
+			
+	<mx:Metadata>
+		[Event(name="fight", type="flash.events.Event")]
+	</mx:Metadata>
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.effects.Dissolve;
+			import assets.TokenAssets;
+			import assets.Images;
+			
+			[Bindable] public var ready:Boolean = false;
+		]]>
+	</mx:Script>
+	
+	<mx:Boolean id="readyToFight">{ready &amp;&amp; list.selectedItem &amp;&amp; input.text != ''}</mx:Boolean>
+	
+	<model:Character id="player">
+		<model:name>{input.text}</model:name>
+		<model:avatar>{list.selectedItem.image}</model:avatar>
+	</model:Character>
+	
+	<mx:ArrayCollection id="options">
+		<mx:Object label="Andre" 		image="{Images.BOY_PATH}"			icon="{TokenAssets.BOY}"/>
+		<mx:Object label="Lola" 		image="{Images.CAT_GIRL_PATH}"		icon="{TokenAssets.CAT_GIRL}"/>
+		<mx:Object label="Amelia" 		image="{Images.HORN_GIRL_PATH}"		icon="{TokenAssets.HORN_GIRL}"/>
+		<mx:Object label="Rose" 		image="{Images.PINK_GIRL_PATH}"		icon="{TokenAssets.PINK_GIRL}"/>
+		<mx:Object label="Blueberry" 	image="{Images.PRINCESS_GIRL_PATH}"	icon="{TokenAssets.PRINCESS_GIRL}"/>
+	</mx:ArrayCollection>
+
+		
+	<mx:VBox horizontalCenter="0" paddingLeft="20" paddingRight="20" paddingTop="80" paddingBottom="20">
+			
+		<mx:Label fontSize="20" fontWeight="bold" text="Choose a Character"/>
+		<mx:TileList 
+			id="list"
+			rowCount="1" 
+			columnCount="{options.length}" 
+			horizontalCenter="0"
+			dataProvider="{options}"
+			top="10"
+			borderStyle="none"
+		/>
+		
+		<mx:Spacer height="20"/>
+		
+		<mx:Label fontSize="20" fontWeight="bold" text="Enter Your Name"/>
+		<mx:TextInput id="input" fontSize="20" width="100%"/>
+		
+		<mx:Spacer height="20"/>
+		<mx:Button label="Fight!" fontSize="60" width="100%" click="dispatchEvent(new Event('fight', true))"
+			enabled="{readyToFight}"
+		/>
+		
+	</mx:VBox>
 </mx:Canvas>
