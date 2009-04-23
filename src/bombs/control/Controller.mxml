@@ -17,6 +17,9 @@
 			public static const USER:String = "seanhess@gmail.com";
 			public static const PASS:String = "cocomo";
 			
+			public static const CHARACTER_SIZE:int = 20;
+			public static const BLAST_RADIUS:int = 20;
+			
 			[Bindable] public var playing:Boolean = false;
 			[Bindable] public var mainCharacter:Character;
 			
@@ -65,6 +68,7 @@
 				var bomb:Bomb = new Bomb();
 					bomb.locationX = mainCharacter.locationX;
 					bomb.locationY = mainCharacter.locationY;
+					bomb.owner = mainCharacter.name;
 					
 				bombsList.share(bomb);
 			}
@@ -76,16 +80,14 @@
 				
 				char.destinationX = update.destinationX;
 				char.destinationY = update.destinationY;
+				char.radius = update.radius;
 				
 				if (mainCharacter && char.name == mainCharacter.name)
 					mainCharacter = char;
 			}
 			
 			/**
-			 * This should only be called when a bomb is created
-			 * since we never update them.
 			 * 
-			 * Hmm... need some way to clean up the bombs.
 			 */
 			protected function updateBomb(event:SimpleListEvent):void
 			{
@@ -94,16 +96,49 @@
 				
 				bomb.locationX = update.locationX;
 				bomb.locationY = update.locationY;
+				bomb.blastRadius = update.blastRadius;
+				bomb.fuse = update.fuse;
+				bomb.owner = update.owner;
 				
 				var timer:BombTimer = new BombTimer();
 					timer.countDown(bomb);
 					timer.addEventListener(BombTimer.EXPLODE, onExplode);
 			}
-			
+
+			/**
+			 * Removes the bomb from the list, and if you are
+			 * the owner, checks to see if you've killed anyone
+			 */
 			protected function onExplode(event:Event):void
 			{
 				var timer:BombTimer = event.target as BombTimer;
-				trace("EXPLODED: " + timer.bomb.locationX + " :: " + timer.bomb.locationY);
+				timer.removeEventListener(BombTimer.EXPLODE, onExplode);
+
+				var bomb:Bomb = timer.bomb;
+				
+				if (bomb.owner == mainCharacter.name)
+				{
+					for (var name:String in characters.items)
+					{
+						var char:Character = characters.items[name];
+						if (bomb.space.intersects(char.space))
+						{
+							char.dead = true;
+							characters.remove(char);
+						}
+					}
+				}
+				
+				bombsList.remove(bomb); // so, EVERYONE is removing the bombs redundantly
+			}
+			
+			protected function onRemoveChar(event:SimpleListEvent):void
+			{
+				if (event.item == mainCharacter)
+				{
+					playing = false;
+					mainCharacter = null;
+				}
 			}
 			
 		]]>
@@ -122,6 +157,7 @@
 		itemType="{Character}"
 		sharedID="characters"
 		receive="updateChar(event)"
+		remove="onRemoveChar(event)"
 	/>
 	
 	<util:SimpleSharedList id="bombsList" 

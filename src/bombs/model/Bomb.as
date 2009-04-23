@@ -1,5 +1,7 @@
 package bombs.model
 {
+	import flash.geom.Rectangle;
+	
 	[Bindable]
 	public class Bomb
 	{
@@ -10,19 +12,13 @@ package bombs.model
 		public var blastRadius:int = 20; // in pixels
 		public var fuse:int = 3; // in seconds
 		
+		public var owner:String;
+		
 		public var exploded:Boolean = false;
 		
-		// does it need an exploded property? // 
-		// not really // 
-		// As soon as it is created, you start the countdown //
-		
-		// They're ALL counting down // 
-		// When they blow up, check to see if the mainCharacter is in the blast radius //  
-		
-		// Change it to exploded // 
-		// Then remove it? //
-		
-		// Ignore removes from the server?  // 
-		// Never send removes to the server // 
+		public function get space():Rectangle
+		{
+			return new Rectangle(locationX - blastRadius, locationY - blastRadius, 2*blastRadius, 2*blastRadius);
+		}
 	}
 }

@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:VBox 
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
-	width="10" height="10" 
+	width="{currentRadius*2}" height="{currentRadius*2}" 
 	backgroundColor="#FF0000"
-	x="{bomb.locationX}"
-	y="{bomb.locationY}"
+	x="{bomb.locationX - currentRadius}"
+	y="{bomb.locationY - currentRadius}"
 	>
+	
+	<mx:Number id="currentRadius">6</mx:Number>
 	
 	<mx:Script>
 		<![CDATA[
@@ -22,8 +24,7 @@
 			{
 				if (value)
 				{
-					width = 100;
-					height = 100;
+					currentRadius = bomb.blastRadius;
 				}
 			}
 		]]>

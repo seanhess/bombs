@@ -66,12 +66,23 @@ package bombs.util
 			node.publishItem(message);
 		}
 		
+		public function remove(item:*):void
+		{
+			if (contains(item))
+				node.retractItem(nodeName, itemId(item));
+		}
+		
 		public function removeAll():void
 		{
 			for (var id:String in items)
 			{
 				node.retractItem(nodeName, id);
 			}
+		}
+		
+		public function contains(item:*):Boolean
+		{
+			return (items[itemId(item)] != null);	
 		}
 		
 		private function onItemReceive(event:CollectionNodeEvent):void

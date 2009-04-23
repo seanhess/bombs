@@ -1,6 +1,6 @@
 package bombs.model
 {
-	import mx.core.IUID;
+	import flash.geom.Rectangle;
 	
 	/**
 	 * Have it store startX and startY on here, but only use them if they change and if x and y aren't currently
@@ -15,6 +15,8 @@ package bombs.model
 	{
 		public var name:String;
 		
+		public var radius:int = 20; // square half-width
+		
 		// Where are we going?
 		public var destinationX:int = -1;
 		public var destinationY:int = -1;
@@ -22,5 +24,12 @@ package bombs.model
 		// these values are not shared.. only used on the client to know where to lay bombs
 		public var locationX:int = -1;
 		public var locationY:int = -1;
+		
+		public var dead:Boolean = false;
+		
+		public function get space():Rectangle
+		{
+			return new Rectangle(locationX - radius, locationY - radius, 2*radius, 2*radius);
+		}
 	}
 }
