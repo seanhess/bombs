@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas 		
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:model="bombs.model.*"
+	width="100%" height="100%" backgroundColor="#FFFFFF"
+	showEffect="{new Dissolve()}"
+	hideEffect="{new Dissolve()}"
+	>
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.effects.Dissolve;
+			import bombs.model.Character;
+			import assets.TokenAssets;
+			
+			[Bindable] public var char:Character;
+		]]>
+	</mx:Script>
+	
+	<mx:VBox horizontalCenter="0" horizontalAlign="center" paddingLeft="20" paddingRight="20" paddingTop="80" paddingBottom="20">
+		<mx:Image source="{TokenAssets.BOMB_BIG}"/>
+		<mx:Label fontSize="24" text="You Have Perished"/>
+		<mx:Label fontSize="12" text="You killed {char.kills} little people"/>
+		
+		<mx:Button label="Fight Again!" fontSize="60" width="100%" click="dispatchEvent(new Event('startover', true))"/>
+	</mx:VBox>
+	
+</mx:Canvas>

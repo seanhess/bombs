@@ -29,6 +29,8 @@
 		moveCharacter="control.move(event.localX, event.localY)"
 		layBomb="control.lay()"	
 		showLogin="{!control.playing}"
+		showDead="{control.dead}"
+		startover="{control.startOver()}"
 		fight="control.joinGame(main.login.player)"
 	/>
 	
@@ -37,8 +39,12 @@
 	<mx:Binding source="control.bombsList" destination="main.game.bombs.list"/>
 	
 	<mx:Binding source="control.playing" destination="main.game.playing"/>
+	<mx:Binding source="control.playing" destination="main.login.playing"/>
 	
 	<mx:Binding source="control.session.isSynchronized" destination="main.login.ready"/>
+	
+	<mx:Binding source="control.highscore" destination="main.highscore"/>
+	<mx:Binding source="control.mainCharacter" destination="main.dead.char"/>
 	
 	
 

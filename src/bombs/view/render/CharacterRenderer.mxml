@@ -74,4 +74,9 @@
 		<mx:AnimateProperty id="animateY" property="locationY"/>
 	</mx:Parallel>
 	
+	<mx:HBox horizontalCenter="0" horizontalAlign="center" bottom="-8" horizontalGap="0">
+		<mx:Label fontSize="8" fontWeight="bold" text="{char.name}" />
+		<mx:Label fontSize="8" fontWeight="bold" text="{char.kills}" color="#FF0000"/>
+	</mx:HBox>
+	
 </mx:Canvas>

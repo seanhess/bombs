@@ -5,6 +5,7 @@
 	width="100%" height="100%" backgroundColor="#FFFFFF"
 	showEffect="{new Dissolve()}"
 	hideEffect="{new Dissolve()}"
+	enabled="{!playing}"
 	>
 	
 			
@@ -19,10 +20,11 @@
 			import assets.Images;
 			
 			[Bindable] public var ready:Boolean = false;
+			[Bindable] public var playing:Boolean = false;
 		]]>
 	</mx:Script>
 	
-	<mx:Boolean id="readyToFight">{ready &amp;&amp; list.selectedItem &amp;&amp; input.text != ''}</mx:Boolean>
+	<mx:Boolean id="readyToFight">{ready &amp;&amp; list.selectedItem &amp;&amp; input.text != '' &amp;&amp; !playing}</mx:Boolean>
 	
 	<model:Character id="player">
 		<model:name>{input.text}</model:name>

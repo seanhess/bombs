@@ -5,9 +5,18 @@
 		[Event(name="moveCharacter",	type="flash.events.MouseEvent")]
 		[Event(name="layBomb",			type="flash.events.Event")]
 		[Event(name="fight",			type="flash.events.Event")]
+		[Event(name="startover",		type="flash.events.Event")]
 	</mx:Metadata>
 	
-	<mx:Boolean id="showLogin">true</mx:Boolean>
+	<mx:Script>
+		<![CDATA[
+			import bombs.model.Character;
+			
+			[Bindable] public var highscore:Character;
+			[Bindable] public var showLogin:Boolean = true;
+			[Bindable] public var showDead:Boolean = false;
+		]]>
+	</mx:Script>
 	
 	<mx:Image source="assets/image/stripes.jpg" width="100%" height="100%" maintainAspectRatio="false"/>
 	
@@ -21,10 +30,13 @@
 			
 			<view:GameView id="game"/>
 			<view:LoginView id="login" visible="{showLogin}"/>
+			<view:DeadView id="dead" visible="{showDead}"/>
 			
 		</mx:Canvas>
+		<mx:HBox backgroundColor="#FFFFFF" borderStyle="solid" right="100" top="10" visible="{highscore != null}" paddingBottom="10" paddingRight="10" paddingTop="10" paddingLeft="10">
+			<mx:Label text="High Score: {highscore.kills} kills by {highscore.name}" fontWeight="bold" fontSize="18"/>
+		</mx:HBox>
 		<mx:Image source="assets/image/logo_flat.png"/>
 	</mx:Canvas>
-	
 				
 </mx:Canvas>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<events:EventDispatcher xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:events="flash.events.*" xmlns:ns="AfcsNameSpace" xmlns:adapt="bombs.adapt.*" xmlns:shared="bombs.model.shared.*" xmlns:model="bombs.model.*" xmlns:util="bombs.util.*">
+<events:EventDispatcher xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:events="flash.events.*" xmlns:ns="AfcsNameSpace" xmlns:adapt="bombs.adapt.*" xmlns:shared="bombs.model.shared.*" xmlns:model="bombs.model.*" xmlns:util="bombs.util.*" xmlns:sharedModel="com.adobe.rtc.sharedModel.*">
 
 	<mx:Script>
 		<![CDATA[
@@ -22,12 +22,22 @@
 			
 			[Bindable] public var playing:Boolean = false;
 			[Bindable] public var mainCharacter:Character;
+			[Bindable] public var dead:Boolean = false;
+			
+			[Bindable] public var highscore:Character;
 			
 			public function connect():void
 			{
 				session.login();
 				characters.subscribe();
 				bombsList.subscribe();
+				scoreProperty.subscribe();
+			}
+			
+			public function startOver():void
+			{
+				dead = false;
+				playing = false;
 			}
 			
 			public function nuke():void
@@ -38,6 +48,7 @@
 			
 			public function joinGame(character:Character):void
 			{
+				trace("[ JOIN GAME ]");
 				mainCharacter = character;
 				playing = true;
 				characters.add(mainCharacter);
@@ -52,6 +63,7 @@
 			{
 				if (!playing) return;
 				
+				trace("[ MOVE ] " + x + " " + y);
 				mainCharacter.destinationX = x;
 				mainCharacter.destinationY = y;
 				update();	
@@ -63,6 +75,7 @@
 			public function update():void
 			{
 				if (!playing) return;
+				trace("[ UPDATE -> ] ");
 				characters.update(mainCharacter);
 			}
 			
@@ -72,6 +85,8 @@
 								
 				if (mainCharacter.bombs < 1)
 					return;
+				
+				trace("[ LAY BOMB -> ] ");
 				
 				mainCharacter.bombs--;
 				
@@ -85,6 +100,7 @@
 			
 			protected function updateChar(event:SimpleListEvent):void
 			{
+
 				var char:Character = event.item as Character;
 				var update:Object = event.update;
 				
@@ -96,9 +112,13 @@
 				
 				char.radius = update.radius;
 				char.avatar = update.avatar;
+				char.kills = update.kills;
 				
-				if (mainCharacter && char.name == mainCharacter.name)
+				trace("[ UPDATE CHAR <- ] " + char.name + " k" + char.kills + " r" + char.radius + " x" + char.destinationX + " y" + char.destinationY);
+
+				if (mainCharacter && char.name == mainCharacter.name && char != mainCharacter)
 				{
+					trace(" - replacing main");
 					char.avatar = mainCharacter.avatar;
 					mainCharacter = char;
 				}
@@ -111,6 +131,8 @@
 			{
 				if (!playing) return;
 				
+				trace("[ UPDATE BOMB <- ] ");
+
 				var bomb:Bomb = event.item as Bomb;
 				var update:Object = event.update;
 				
@@ -133,6 +155,8 @@
 			{
 				if (!playing) return;
 				
+				trace("[ EXPLODE ] ");
+
 				var timer:BombTimer = event.target as BombTimer;
 				timer.removeEventListener(BombTimer.EXPLODE, onExplode);
 
@@ -140,14 +164,24 @@
 				
 				if (mainCharacter && bomb.owner == mainCharacter.name)
 				{
+					trace(" - check kills");
+					
 					for (var name:String in characters.items)
 					{
 						var char:Character = characters.items[name];
 						if (bomb.space.intersects(char.space))
 						{
+							trace(" - killed: " + char.name);
+
 							char.dead = true;
 							characters.remove(char);
 							mainCharacter.kills++;
+							mainCharacter.radius += 2;
+							
+							if (!highscore || mainCharacter.kills > highscore.kills)
+							{
+								scoreProperty.value = mainCharacter;
+							}
 						}
 					}
 					
@@ -161,13 +195,27 @@
 			
 			protected function onRemoveChar(event:SimpleListEvent):void
 			{
+				trace("[ REMOVE CHAR ] " + event.item);
+				
 				if (event.item == mainCharacter)
 				{
+					trace(" - was main");
 					playing = false;
-					mainCharacter = null;
+					dead = true;
 				}
 			}
 			
+			protected function onHighScoreChange(event:SharedPropertyEvent):void
+			{
+				if (scoreProperty.value == null)
+					return;
+				
+				var highScoreCharacter:Character = new Character();
+				highScoreCharacter.name = scoreProperty.value.name;
+				highScoreCharacter.kills = scoreProperty.value.kills;
+				
+				highscore = highScoreCharacter;
+			}
 		]]>
 	</mx:Script>
 
@@ -193,6 +241,13 @@
 		itemType="{Bomb}"
 		sharedID="bombs"
 		receive="updateBomb(event)"
+	/>
+	
+	<sharedModel:SharedProperty id="scoreProperty"
+		connectSession="{session}"
+		sharedID="highscore"
+		nodeName="character"
+		change="onHighScoreChange(event)"
 	/>
 
 </events:EventDispatcher>

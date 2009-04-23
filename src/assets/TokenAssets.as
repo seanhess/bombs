@@ -46,6 +46,9 @@ package assets
 		[Embed("/assets/image/bomb_flat_small.png")]
 		public static const BOMB:Class;
 		
+		[Embed("/assets/image/bomb_flat.png")]
+		public static const BOMB_BIG:Class;
+		
 		[Embed("/assets/image/explosion.png")]
 		public static const EXPLOSION:Class;
 	}
