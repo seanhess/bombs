@@ -27,7 +27,7 @@ package bombs.model
 		
 		public var dead:Boolean = false;
 		
-		public var bombs:int = 5;
+		public var bombs:int = 3;
 		
 		public var kills:int = 0;
 		

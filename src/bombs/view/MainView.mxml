@@ -22,7 +22,7 @@
 	
 	<mx:Canvas horizontalCenter="0" verticalCenter="0" width="1000" height="800" horizontalScrollPolicy="off" verticalScrollPolicy="off">
 		<mx:Canvas width="80%" height="80%" 
-			borderStyle="solid" borderThickness="10" borderColor="#000000"
+			borderStyle="solid" borderThickness="10"
 			backgroundColor="#FFFFFF" 
 			horizontalScrollPolicy="off" verticalScrollPolicy="off"
 			horizontalCenter="0" verticalCenter="0" 

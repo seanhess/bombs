@@ -176,7 +176,7 @@
 							char.dead = true;
 							characters.remove(char);
 							mainCharacter.kills++;
-							mainCharacter.radius += 2;
+							mainCharacter.radius += 5;
 							
 							if (!highscore || mainCharacter.kills > highscore.kills)
 							{
