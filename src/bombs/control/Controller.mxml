@@ -159,30 +159,19 @@
 			 * Called when a bomb is added to the list. Lets us set up
 			 * the timer. 
 			 */
-			protected function updateBomb(event:SimpleListEvent):void
+			protected function addBomb(event:SimpleListEvent):void
 			{
 				if (!playing) return;
 				
 				trace("[ UPDATE BOMB <- ] ");
 
 				var bomb:Bomb = event.item as Bomb;
-				var update:Object = event.update;
-				
-				bomb.locationX = update.locationX;
-				bomb.locationY = update.locationY;
-				bomb.blastRadius = update.blastRadius;
-				bomb.fuse = update.fuse;
-				bomb.owner = update.owner;
 				
 				var timer:BombTimer = new BombTimer();
 					timer.countDown(bomb);
 					timer.addEventListener(BombTimer.EXPLODE, onExplode);
 			}
 
-			/**
-			 * Removes the bomb from the list, and if you are
-			 * the owner, checks to see if you've killed anyone
-			 */
 			protected function onExplode(event:Event):void
 			{
 				trace("[ EXPLODE ] ");
@@ -222,7 +211,7 @@
 					dead = true;
 				}
 				
-				bombsList.remove(bomb); // so, EVERYONE is removing the bombs redundantly. This is ignored, but it keeps the thing clean
+				bombsList.remove(bomb); // so, EVERYONE is removing the bombs redundantly. This is ignored, but it keeps the server clean
 				timer.countExplosion(bomb);
 			}
 			
@@ -268,12 +257,9 @@
 		remove="removeChar(event)"
 	/>
 	
-	<util:SharedBombList id="bombsList" 
+	<util:BombList id="bombsList" 
 		session="{session}" 
-		idField="id"
-		itemType="{Bomb}"
-		sharedID="bombs"
-		receive="updateBomb(event)"
+		add="addBomb(event)"
 	/>
 	
 	<sharedModel:SharedProperty id="scoreProperty"
