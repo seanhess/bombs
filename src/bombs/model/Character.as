@@ -33,6 +33,12 @@ package bombs.model
 		
 		public var avatar:String;
 		
+		public function updateKills(value:int):void
+		{
+			kills = value;
+			radius = 20 + kills*5;			
+		}
+		
 		public function get space():Rectangle
 		{
 			return new Rectangle(locationX - radius, locationY - radius, 2*radius, 2*radius);

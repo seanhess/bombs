@@ -35,6 +35,13 @@ package bombs.util
 			timer.start(); 
 		}
 		
+		public function stop():void
+		{
+			timer.stop();
+			timer.removeEventListener(TimerEvent.TIMER, onTimer);
+			this.char = null;
+		}
+		
 		public function active():void
 		{
 			count = 0;

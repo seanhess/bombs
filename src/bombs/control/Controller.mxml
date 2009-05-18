@@ -22,7 +22,7 @@
 			public static const BLAST_RADIUS:int = 20;
 			
 			[Bindable] public var playing:Boolean = false;
-			[Bindable] public var mainCharacter:Character;
+			[Bindable] public var mainCharacter:Character = new Character();
 			[Bindable] public var dead:Boolean = false;
 			
 			[Bindable] public var highscore:Character;
@@ -43,19 +43,13 @@
 				dead = false;
 				playing = false;
 			}
-			
-			public function nuke():void
-			{
-				characters.removeAll();
-				bombsList.removeAll();
-			}
-			
+
 			public function joinGame(character:Character):void
 			{
 				trace("[ JOIN GAME ]");
 				mainCharacter = character;
 				playing = true;
-				characters.add(mainCharacter);
+				characters.create(mainCharacter);
 			}
 			
 			public function startPlaying():void
@@ -70,18 +64,9 @@
 				trace("[ MOVE ] " + x + " " + y);
 				mainCharacter.destinationX = x;
 				mainCharacter.destinationY = y;
-				update();	
+				characters.move(mainCharacter);
 			}
 			
-			/**
-			 * updates the main char on the server
-			 */
-			public function update():void
-			{
-				if (!playing) return;
-				trace("[ UPDATE -> ] ");
-				characters.update(mainCharacter);
-			}
 			
 			public function lay():void
 			{
@@ -126,77 +111,67 @@
 				var timer:CharacterTimer = event.target as CharacterTimer;
 					timer.removeEventListener(CharacterTimer.INACTIVE, onInactive);
 					
-				if (!playing) return;
-					
 				var char:Character = timer.char;
 
-				if (char == mainCharacter)
-				{
-					playing = false;
-					dead = true;
-				}
-
+				trace("INACTIVE : " + char.name); 
+	
 				characters.remove(char);
 				delete activeCharacters[char];
+				timer.stop();
+			}
+			
+			protected function newChar(event:SimpleListEvent):void
+			{
+				var char:Character = event.item as Character;
+				
+				if (mainCharacter && char.name == mainCharacter.name)
+					mainCharacter = char;
+	
+				else
+					checkActivity(char);
 			}
 			
 			protected function updateChar(event:SimpleListEvent):void
 			{
-				if (!playing) return;
-				
 				var char:Character = event.item as Character;
-				var update:Object = event.update;
 				
-				checkActivity(char);
+				if (mainCharacter && char != mainCharacter)
+					checkActivity(char);
+			}
+			
+			protected function removeChar(event:SimpleListEvent):void
+			{
+				var char:Character = event.item as Character;
+				var timer:CharacterTimer = activeCharacters[char];
 				
-				if (!mainCharacter || char.name != mainCharacter.name)
+				if (char == mainCharacter)
 				{
-					char.destinationX = update.destinationX;
-					char.destinationY = update.destinationY;
+					dead = true;
+					playing = false;
 				}
 				
-				char.radius = update.radius;
-				char.avatar = update.avatar;
-				char.kills = update.kills;
+				if (timer)
+					timer.stop();
 				
-				trace("[ UPDATE CHAR <- ] " + char.name + " k" + char.kills + " r" + char.radius + " x" + char.destinationX + " y" + char.destinationY);
-
-				if (mainCharacter && char.name == mainCharacter.name && char != mainCharacter)
-				{
-					trace(" - replacing main");
-					char.avatar = mainCharacter.avatar;
-					mainCharacter = char;
-				}
+				delete activeCharacters[char];
+				
 			}
 			
 			/**
 			 * Called when a bomb is added to the list. Lets us set up
 			 * the timer. 
 			 */
-			protected function updateBomb(event:SimpleListEvent):void
+			protected function addBomb(event:SimpleListEvent):void
 			{
-				if (!playing) return;
-				
 				trace("[ UPDATE BOMB <- ] ");
 
 				var bomb:Bomb = event.item as Bomb;
-				var update:Object = event.update;
-				
-				bomb.locationX = update.locationX;
-				bomb.locationY = update.locationY;
-				bomb.blastRadius = update.blastRadius;
-				bomb.fuse = update.fuse;
-				bomb.owner = update.owner;
 				
 				var timer:BombTimer = new BombTimer();
 					timer.countDown(bomb);
 					timer.addEventListener(BombTimer.EXPLODE, onExplode);
 			}
 
-			/**
-			 * Removes the bomb from the list, and if you are
-			 * the owner, checks to see if you've killed anyone
-			 */
 			protected function onExplode(event:Event):void
 			{
 				trace("[ EXPLODE ] ");
@@ -208,15 +183,12 @@
 				var bomb:Bomb = timer.bomb;
 				
 				if (bomb.owner == mainCharacter.name)
-				{
 					mainCharacter.bombs++;
-					update();					
-				}
 				
 				if (bomb.space.intersects(mainCharacter.space))
 				{
 					// then you is dead! // 
-					trace(" - died ");
+					trace(" - Main Character Died ");
 					
 					mainCharacter.dead = true;
 					characters.remove(mainCharacter);
@@ -232,14 +204,14 @@
 						if (!highscore || killer.kills > highscore.kills)
 							scoreProperty.value = killer;
 							
-						characters.update(killer);
+						characters.kills(killer);
 					}
 					
 					playing = false;
 					dead = true;
 				}
 				
-				bombsList.remove(bomb); // so, EVERYONE is removing the bombs redundantly. This is ignored, but it keeps the thing clean
+				bombsList.remove(bomb); // so, EVERYONE is removing the bombs redundantly. This is ignored, but it keeps the server clean
 				timer.countExplosion(bomb);
 			}
 			
@@ -271,27 +243,24 @@
 	</mx:Script>
 
 	<!-- Auth -->	
-	<ns:AdobeHSAuthenticator id="auth" userName="guest"/>
+	<ns:AdobeHSAuthenticator id="guest" userName="guest"/>
+	<ns:AdobeHSAuthenticator id="auth" userName="seanhess+afcs1@gmail.com" password="cocomo"/>
 	<ns:LocalAuthenticator id="local"/>
 
 	<!-- Session -->
 	<ns:ConnectSession id="session" authenticator="{auth}" roomURL="{ROOM}"/>
 	
 	<!-- Sharing -->
-	<util:SimpleSharedList id="characters" 
-		session="{session}" 
-		idField="name"
-		itemType="{Character}"
-		sharedID="characters"
-		receive="updateChar(event)"
+	<util:CharacterList id="characters"
+		session="{session}"
+		update="updateChar(event)"
+		add="newChar(event)"
+		remove="removeChar(event)"
 	/>
 	
-	<util:SharedBombList id="bombsList" 
+	<util:BombList id="bombsList" 
 		session="{session}" 
-		idField="id"
-		itemType="{Bomb}"
-		sharedID="bombs"
-		receive="updateBomb(event)"
+		add="addBomb(event)"
 	/>
 	
 	<sharedModel:SharedProperty id="scoreProperty"
