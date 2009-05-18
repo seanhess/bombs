@@ -9,7 +9,11 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import mx.effects.easing.Linear;
 			import bombs.model.Character;
+			
+			public static const BASE_DURATION:Number = 4; // ms / pixel
+			
 			[Bindable] private var char:Character;
 			
 			override public function set data(value:Object):void
@@ -41,11 +45,21 @@
 				{
 					destChanged = false;
 					
-					moveChar.pause();
+					moveChar.stop();
 					
+					var dx:int = Math.abs(char.destinationX - char.locationX);
+					var dy:int = Math.abs(char.destinationY - char.locationY);
+					
+					var xDuration:Number = BASE_DURATION * dx;
+					var yDuration:Number = BASE_DURATION * dy;
+					
+					var duration:Number = (xDuration > yDuration) ? xDuration : yDuration;
+					
+					animateX.duration = duration;
 					animateX.fromValue = char.locationX;
 					animateX.toValue = char.destinationX;
 					
+					animateY.duration = duration;
 					animateY.fromValue = char.locationY;
 					animateY.toValue = char.destinationY;
 					
@@ -70,8 +84,8 @@
 	<mx:Binding source="char.dead" destination="dead"/>
 		
 	<mx:Parallel id="moveChar" target="{char}" effectEnd="onMoved()">
-		<mx:AnimateProperty id="animateX" property="locationX"/>
-		<mx:AnimateProperty id="animateY" property="locationY"/>
+		<mx:AnimateProperty id="animateX" property="locationX" easingFunction="{Linear.easeNone}"/>
+		<mx:AnimateProperty id="animateY" property="locationY" easingFunction="{Linear.easeNone}"/>
 	</mx:Parallel>
 	
 	<mx:HBox horizontalCenter="0" horizontalAlign="center" bottom="-8" horizontalGap="0">
