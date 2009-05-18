@@ -221,9 +221,10 @@
 
 	<!-- Auth -->	
 	<ns:AdobeHSAuthenticator id="auth" userName="{USER}" password="{PASS}"/>
+	<ns:LocalAuthenticator id="local"/>
 
 	<!-- Session -->
-	<ns:ConnectSession id="session" authenticator="{auth}" roomURL="{ROOM}"/>
+	<ns:ConnectSession id="session" authenticator="{local}" roomURL="{ROOM}"/>
 	
 	<!-- Sharing -->
 	<util:SimpleSharedList id="characters" 
