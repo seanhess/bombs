@@ -11,6 +11,7 @@ package bombs.model
 		
 		public var blastRadius:int = 100; // in pixels
 		public var fuse:Number = 1.8; // in seconds
+		public var explosion:Number = 0.2; // seconds, the time the explosion stays on the screen
 		
 		public var owner:String;
 		

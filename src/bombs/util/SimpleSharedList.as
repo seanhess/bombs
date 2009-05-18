@@ -109,12 +109,16 @@ package bombs.util
 				dispatchEvent(new SimpleListEvent(SimpleListEvent.UPDATE, item));
 		}
 		
-		private function onItemRetract(event:CollectionNodeEvent):void
+		protected function onItemRetract(event:CollectionNodeEvent):void
 		{
 			var id:String = event.item.itemID;
+			issueRemove(id);
+		}
+		
+		protected function issueRemove(id:String):void
+		{
 			var item:* = items[id];
 			delete items[id];
-			
 			dispatchEvent(new SimpleListEvent(SimpleListEvent.REMOVE, item));
 		}
 	

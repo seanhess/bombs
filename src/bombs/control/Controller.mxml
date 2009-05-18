@@ -3,6 +3,8 @@
 
 	<mx:Script>
 		<![CDATA[
+			import com.adobe.rtc.events.SessionEvent;
+			import com.adobe.rtc.events.CollectionNodeEvent;
 			import bombs.util.BombTimer;
 			import bombs.model.Bomb;
 			import bombs.util.SimpleListEvent;
@@ -100,7 +102,6 @@
 			
 			protected function updateChar(event:SimpleListEvent):void
 			{
-
 				var char:Character = event.item as Character;
 				var update:Object = event.update;
 				
@@ -125,7 +126,8 @@
 			}
 			
 			/**
-			 * 
+			 * Called when a bomb is added to the list. Lets us set up
+			 * the timer. 
 			 */
 			protected function updateBomb(event:SimpleListEvent):void
 			{
@@ -153,56 +155,61 @@
 			 */
 			protected function onExplode(event:Event):void
 			{
-				if (!playing) return;
-				
 				trace("[ EXPLODE ] ");
 
 				var timer:BombTimer = event.target as BombTimer;
-				timer.removeEventListener(BombTimer.EXPLODE, onExplode);
+					timer.removeEventListener(BombTimer.EXPLODE, onExplode);
+					timer.addEventListener(BombTimer.DONE_EXPLODING, onDoneExploding);
 
 				var bomb:Bomb = timer.bomb;
 				
-				if (mainCharacter && bomb.owner == mainCharacter.name)
+				if (bomb.owner == mainCharacter.name)
 				{
-					trace(" - check kills");
-					
-					for (var name:String in characters.items)
-					{
-						var char:Character = characters.items[name];
-						if (bomb.space.intersects(char.space))
-						{
-							trace(" - killed: " + char.name);
-
-							char.dead = true;
-							characters.remove(char);
-							mainCharacter.kills++;
-							mainCharacter.radius += 5;
-							
-							if (!highscore || mainCharacter.kills > highscore.kills)
-							{
-								scoreProperty.value = mainCharacter;
-							}
-						}
-					}
-					
 					mainCharacter.bombs++;
-					
-					update(); // tell everybody about your kills!
+					update();					
 				}
 				
-				bombsList.remove(bomb); // so, EVERYONE is removing the bombs redundantly
-			}
-			
-			protected function onRemoveChar(event:SimpleListEvent):void
-			{
-				trace("[ REMOVE CHAR ] " + event.item);
-				
-				if (event.item == mainCharacter)
+				if (bomb.space.intersects(mainCharacter.space))
 				{
-					trace(" - was main");
+					// then you is dead! // 
+					trace(" - died ");
+					
+					mainCharacter.dead = true;
+					characters.remove(mainCharacter);
+					
+					var owner:String = bomb.owner;
+					
+					if (owner != mainCharacter.name)
+					{
+						var killer:Character = characters.items[owner];
+							killer.kills++;
+							killer.radius += 5;
+							
+						if (!highscore || killer.kills > highscore.kills)
+							scoreProperty.value = killer;
+							
+						characters.update(killer);
+					}
+					
 					playing = false;
 					dead = true;
 				}
+				
+				bombsList.remove(bomb); // so, EVERYONE is removing the bombs redundantly. This is ignored, but it keeps the thing clean
+				timer.countExplosion(bomb);
+			}
+			
+			/**
+			 * Tell the list to issue an event saying it's ok to 
+			 * remove the renderer
+			 */
+			protected function onDoneExploding(event:Event):void
+			{
+				var timer:BombTimer = event.target as BombTimer;
+					timer.removeEventListener(BombTimer.DONE_EXPLODING, onDoneExploding);
+					
+				var bomb:Bomb = timer.bomb;
+				bombsList.bombDoneExploding(bomb);
 			}
 			
 			protected function onHighScoreChange(event:SharedPropertyEvent):void
@@ -233,10 +240,9 @@
 		itemType="{Character}"
 		sharedID="characters"
 		receive="updateChar(event)"
-		remove="onRemoveChar(event)"
 	/>
 	
-	<util:SimpleSharedList id="bombsList" 
+	<util:SharedBombList id="bombsList" 
 		session="{session}" 
 		idField="id"
 		itemType="{Bomb}"
