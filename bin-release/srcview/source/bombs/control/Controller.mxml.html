@@ -31,7 +31,7 @@
             <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">BLAST_RADIUS</span>:<span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 20;
             
             <span class="ActionScriptMetadata">Bindable]</span> <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">playing</span>:<span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
-            <span class="ActionScriptMetadata">Bindable]</span> <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">mainCharacter</span>:<span class="ActionScriptDefault_Text">Character</span>;
+            <span class="ActionScriptMetadata">Bindable]</span> <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">mainCharacter</span>:<span class="ActionScriptDefault_Text">Character</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Character</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptBracket/Brace">)</span>;
             <span class="ActionScriptMetadata">Bindable]</span> <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">dead</span>:<span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
             
             <span class="ActionScriptMetadata">Bindable]</span> <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">highscore</span>:<span class="ActionScriptDefault_Text">Character</span>;
@@ -121,17 +121,13 @@
                     <span class="ActionScriptDefault_Text">timer</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">removeEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">CharacterTimer</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">INACTIVE</span><span class="ActionScriptOperator">,</span> <span class="ActionScriptDefault_Text">onInactive</span><span class="ActionScriptBracket/Brace">)</span>;
                     
                 <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">char</span>:<span class="ActionScriptDefault_Text">Character</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">timer</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">char</span>;
-                
-                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">char</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">mainCharacter</span><span class="ActionScriptBracket/Brace">)</span>
-                <span class="ActionScriptBracket/Brace">{</span>
-                    <span class="ActionScriptDefault_Text">dead</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
-                    <span class="ActionScriptDefault_Text">playing</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
-                <span class="ActionScriptBracket/Brace">}</span>
+
+                <span class="ActionScriptDefault_Text">trace</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptBracket/Brace"></span><span class="ActionScriptBracket/Brace"></span><span class="ActionScriptString">"INACTIVE : "</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">char</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptBracket/Brace"></span><span class="ActionScriptBracket/Brace">)</span>; 
     
                 <span class="ActionScriptDefault_Text">characters</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">remove</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">char</span><span class="ActionScriptBracket/Brace">)</span>;
                 <span class="ActionScriptReserved">delete</span> <span class="ActionScriptDefault_Text">activeCharacters</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">char</span><span class="ActionScriptBracket/Brace">]</span>;
                 <span class="ActionScriptDefault_Text">timer</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">stop</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptBracket/Brace">)</span>;
-            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptBracket/Brace"></span><span class="ActionScriptBracket/Brace">}</span>
             
             <span class="ActionScriptReserved">protected</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">newChar</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span>:<span class="ActionScriptDefault_Text">SimpleListEvent</span><span class="ActionScriptBracket/Brace">)</span>:<span class="ActionScriptReserved">void</span>
             <span class="ActionScriptBracket/Brace">{</span>
@@ -157,6 +153,12 @@
                 <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">char</span>:<span class="ActionScriptDefault_Text">Character</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">item</span> <span class="ActionScriptReserved">as</span> <span class="ActionScriptDefault_Text">Character</span>;
                 <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">timer</span>:<span class="ActionScriptDefault_Text">CharacterTimer</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">activeCharacters</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">char</span><span class="ActionScriptBracket/Brace">]</span>;
                 
+                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">char</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">mainCharacter</span><span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">dead</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+                    <span class="ActionScriptDefault_Text">playing</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+                
                 <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">timer</span><span class="ActionScriptBracket/Brace">)</span>
                     <span class="ActionScriptDefault_Text">timer</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">stop</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptBracket/Brace">)</span>;
                 
@@ -170,8 +172,6 @@
              */</span>
             <span class="ActionScriptReserved">protected</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">addBomb</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span>:<span class="ActionScriptDefault_Text">SimpleListEvent</span><span class="ActionScriptBracket/Brace">)</span>:<span class="ActionScriptReserved">void</span>
             <span class="ActionScriptBracket/Brace">{</span>
-                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptOperator">!</span><span class="ActionScriptDefault_Text">playing</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptReserved">return</span>;
-                
                 <span class="ActionScriptDefault_Text">trace</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptBracket/Brace"></span><span class="ActionScriptBracket/Brace"></span><span class="ActionScriptString">"[ UPDATE BOMB &lt;- ] "</span><span class="ActionScriptBracket/Brace"></span><span class="ActionScriptBracket/Brace">)</span>;
 
                 <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">bomb</span>:<span class="ActionScriptDefault_Text">Bomb</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">item</span> <span class="ActionScriptReserved">as</span> <span class="ActionScriptDefault_Text">Bomb</span>;
@@ -197,7 +197,7 @@
                 <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">bomb</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">space</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">intersects</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">mainCharacter</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">space</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptBracket/Brace">)</span>
                 <span class="ActionScriptBracket/Brace">{</span><span class="ActionScriptBracket/Brace"></span>
                     <span class="ActionScriptComment">// then you is dead! // 
-</span>                    <span class="ActionScriptDefault_Text">trace</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptBracket/Brace"></span><span class="ActionScriptString">" - died "</span><span class="ActionScriptBracket/Brace"></span><span class="ActionScriptBracket/Brace">)</span>;
+</span>                    <span class="ActionScriptDefault_Text">trace</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptBracket/Brace"></span><span class="ActionScriptString">" - Main Character Died "</span><span class="ActionScriptBracket/Brace"></span><span class="ActionScriptBracket/Brace">)</span>;
                     
                     <span class="ActionScriptDefault_Text">mainCharacter</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">dead</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
                     <span class="ActionScriptDefault_Text">characters</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">remove</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">mainCharacter</span><span class="ActionScriptBracket/Brace">)</span>;
