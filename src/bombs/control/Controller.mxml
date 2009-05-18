@@ -17,8 +17,6 @@
 			
 			// CONSTS // 
 			public static const ROOM:String = "http://connectnow.acrobat.com/seanafcs1/bombs";
-			public static const USER:String = "seanhess+afcs1@gmail.com";
-			public static const PASS:String = "cocomo";
 			
 			public static const CHARACTER_SIZE:int = 20;
 			public static const BLAST_RADIUS:int = 20;
@@ -273,7 +271,7 @@
 	</mx:Script>
 
 	<!-- Auth -->	
-	<ns:AdobeHSAuthenticator id="auth" userName="{USER}" password="{PASS}"/>
+	<ns:AdobeHSAuthenticator id="auth" userName="guest"/>
 	<ns:LocalAuthenticator id="local"/>
 
 	<!-- Session -->
