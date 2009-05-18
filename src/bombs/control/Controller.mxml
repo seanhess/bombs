@@ -17,8 +17,6 @@
 			
 			// CONSTS // 
 			public static const ROOM:String = "http://connectnow.acrobat.com/seanafcs1/bombs";
-			public static const USER:String = "seanhess+afcs1@gmail.com";
-			public static const PASS:String = "cocomo";
 			
 			public static const CHARACTER_SIZE:int = 20;
 			public static const BLAST_RADIUS:int = 20;
@@ -45,19 +43,13 @@
 				dead = false;
 				playing = false;
 			}
-			
-			public function nuke():void
-			{
-				characters.removeAll();
-				bombsList.removeAll();
-			}
-			
+
 			public function joinGame(character:Character):void
 			{
 				trace("[ JOIN GAME ]");
 				mainCharacter = character;
 				playing = true;
-				characters.add(mainCharacter);
+				characters.create(mainCharacter);
 			}
 			
 			public function startPlaying():void
@@ -72,18 +64,9 @@
 				trace("[ MOVE ] " + x + " " + y);
 				mainCharacter.destinationX = x;
 				mainCharacter.destinationY = y;
-				update();	
+				characters.move(mainCharacter);
 			}
 			
-			/**
-			 * updates the main char on the server
-			 */
-			public function update():void
-			{
-				if (!playing) return;
-				trace("[ UPDATE -> ] ");
-				characters.update(mainCharacter);
-			}
 			
 			public function lay():void
 			{
@@ -132,43 +115,33 @@
 					
 				var char:Character = timer.char;
 
-				if (char == mainCharacter)
+				if (mainCharacter && char == mainCharacter)
 				{
 					playing = false;
 					dead = true;
 				}
-
+	
 				characters.remove(char);
 				delete activeCharacters[char];
 			}
 			
+			protected function newChar(event:SimpleListEvent):void
+			{
+				var char:Character = event.item as Character;
+				
+				if (mainCharacter && char.name == mainCharacter.name)
+					mainCharacter = char;
+	
+				else
+					checkActivity(char);
+			}
+			
 			protected function updateChar(event:SimpleListEvent):void
 			{
-				if (!playing) return;
-				
 				var char:Character = event.item as Character;
-				var update:Object = event.update;
 				
-				checkActivity(char);
-				
-				if (!mainCharacter || char.name != mainCharacter.name)
-				{
-					char.destinationX = update.destinationX;
-					char.destinationY = update.destinationY;
-				}
-				
-				char.radius = update.radius;
-				char.avatar = update.avatar;
-				char.kills = update.kills;
-				
-				trace("[ UPDATE CHAR <- ] " + char.name + " k" + char.kills + " r" + char.radius + " x" + char.destinationX + " y" + char.destinationY);
-
-				if (mainCharacter && char.name == mainCharacter.name && char != mainCharacter)
-				{
-					trace(" - replacing main");
-					char.avatar = mainCharacter.avatar;
-					mainCharacter = char;
-				}
+				if (mainCharacter && char != mainCharacter)
+					checkActivity(char);
 			}
 			
 			/**
@@ -210,10 +183,7 @@
 				var bomb:Bomb = timer.bomb;
 				
 				if (bomb.owner == mainCharacter.name)
-				{
 					mainCharacter.bombs++;
-					update();					
-				}
 				
 				if (bomb.space.intersects(mainCharacter.space))
 				{
@@ -234,7 +204,7 @@
 						if (!highscore || killer.kills > highscore.kills)
 							scoreProperty.value = killer;
 							
-						characters.update(killer);
+						characters.kills(killer);
 					}
 					
 					playing = false;
@@ -273,19 +243,17 @@
 	</mx:Script>
 
 	<!-- Auth -->	
-	<ns:AdobeHSAuthenticator id="auth" userName="{USER}" password="{PASS}"/>
+	<ns:AdobeHSAuthenticator id="auth" userName="seanhess+afcs1@gmail.com" password="cocomo"/>
 	<ns:LocalAuthenticator id="local"/>
 
 	<!-- Session -->
 	<ns:ConnectSession id="session" authenticator="{auth}" roomURL="{ROOM}"/>
 	
 	<!-- Sharing -->
-	<util:SimpleSharedList id="characters" 
-		session="{session}" 
-		idField="name"
-		itemType="{Character}"
-		sharedID="characters"
-		receive="updateChar(event)"
+	<util:CharacterList id="characters"
+		session="{session}"
+		update="updateChar(event)"
+		add="newChar(event)"
 	/>
 	
 	<util:SharedBombList id="bombsList" 
