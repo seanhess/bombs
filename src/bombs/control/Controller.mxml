@@ -3,6 +3,7 @@
 
 	<mx:Script>
 		<![CDATA[
+			import bombs.util.CharacterTimer;
 			import com.adobe.rtc.events.SessionEvent;
 			import com.adobe.rtc.events.CollectionNodeEvent;
 			import bombs.util.BombTimer;
@@ -28,12 +29,15 @@
 			
 			[Bindable] public var highscore:Character;
 			
+			private var activeCharacters:Dictionary;
+			
 			public function connect():void
 			{
 				session.login();
 				characters.subscribe();
 				bombsList.subscribe();
 				scoreProperty.subscribe();
+				activeCharacters = new Dictionary(true);
 			}
 			
 			public function startOver():void
@@ -100,10 +104,50 @@
 				bombsList.add(bomb);
 			}
 			
+			protected function checkActivity(char:Character):void
+			{
+				if (activeCharacters[char] == null)
+				{
+					var timer:CharacterTimer = new CharacterTimer();
+						timer.checkInactivity(char);
+						timer.addEventListener(CharacterTimer.INACTIVE, onInactive);
+					
+					activeCharacters[char] = timer; 
+				}
+				else
+				{
+					var timer:CharacterTimer = activeCharacters[char];
+					timer.active();
+				}
+			}
+			
+			protected function onInactive(event:Event):void
+			{
+				var timer:CharacterTimer = event.target as CharacterTimer;
+					timer.removeEventListener(CharacterTimer.INACTIVE, onInactive);
+					
+				if (!playing) return;
+					
+				var char:Character = timer.char;
+
+				if (char == mainCharacter)
+				{
+					playing = false;
+					dead = true;
+				}
+
+				characters.remove(char);
+				delete activeCharacters[char];
+			}
+			
 			protected function updateChar(event:SimpleListEvent):void
 			{
+				if (!playing) return;
+				
 				var char:Character = event.item as Character;
 				var update:Object = event.update;
+				
+				checkActivity(char);
 				
 				if (!mainCharacter || char.name != mainCharacter.name)
 				{
