@@ -32,6 +32,8 @@
 				<node label="Enemy Bug.png" icon="imageIcon" url="source/assets/image/Enemy Bug.png.html"/>
 				<node label="explosion.png" icon="imageIcon" url="source/assets/image/explosion.png.html"/>
 				<node label="Flat Death Eyes.png" icon="imageIcon" url="source/assets/image/Flat Death Eyes.png.html"/>
+				<node label="help.png" icon="imageIcon" url="source/assets/image/help.png.html"/>
+				<node label="help_small.png" icon="imageIcon" url="source/assets/image/help_small.png.html"/>
 				<node label="logo_flat.png" icon="imageIcon" url="source/assets/image/logo_flat.png.html"/>
 				<node label="splat.png" icon="imageIcon" url="source/assets/image/splat.png.html"/>
 				<node label="stripes.jpg" icon="imageIcon" url="source/assets/image/stripes.jpg.html"/>
