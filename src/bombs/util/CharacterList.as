@@ -55,24 +55,22 @@ package bombs.util
 			
 			var message:MessageItem = new MessageItem(character.name, info, "info");
 			node.publishItem(message);
+			
+			move(character, false);
+			kills(character, false);
 		}
 		
-		public function move(character:Character):void
+		public function move(character:Character, update:Boolean = true):void
 		{
 			var dest:Point = new Point(character.destinationX, character.destinationY);
 			var message:MessageItem = new MessageItem(character.name, dest, "dest");
-			node.publishItem(message);
+			node.publishItem(message, update);
 		}
 		
-		public function kills(character:Character):void
+		public function kills(character:Character, update:Boolean = true):void
 		{
-			var info:Object = {
-				kills: character.kills,
-				radius: character.radius
-			} 
-			
-			var message:MessageItem = new MessageItem(character.name, info, "kills");
-			node.publishItem(message);
+			var message:MessageItem = new MessageItem(character.name, character.kills, "kills");
+			node.publishItem(message, update);
 		}
 		
 		public function remove(character:Character):void
@@ -102,8 +100,7 @@ package bombs.util
 					character.destinationY = message.body.y;
 					break;
 				case "kills":
-					character.kills = message.body.kills;
-					character.radius = message.body.radius;
+					character.updateKills(message.body as int);
 					break;
 				default:
 					throw new Error("Character update of type: " + type);

@@ -111,18 +111,17 @@
 				var timer:CharacterTimer = event.target as CharacterTimer;
 					timer.removeEventListener(CharacterTimer.INACTIVE, onInactive);
 					
-				if (!playing) return;
-					
 				var char:Character = timer.char;
-
-				if (mainCharacter && char == mainCharacter)
+				
+				if (char == mainCharacter)
 				{
-					playing = false;
 					dead = true;
+					playing = false;
 				}
 	
 				characters.remove(char);
 				delete activeCharacters[char];
+				timer.stop();
 			}
 			
 			protected function newChar(event:SimpleListEvent):void
@@ -142,6 +141,18 @@
 				
 				if (mainCharacter && char != mainCharacter)
 					checkActivity(char);
+			}
+			
+			protected function removeChar(event:SimpleListEvent):void
+			{
+				var char:Character = event.item as Character;
+				var timer:CharacterTimer = activeCharacters[char];
+				
+				if (timer)
+					timer.stop();
+				
+				delete activeCharacters[char];
+				
 			}
 			
 			/**
@@ -254,6 +265,7 @@
 		session="{session}"
 		update="updateChar(event)"
 		add="newChar(event)"
+		remove="removeChar(event)"
 	/>
 	
 	<util:SharedBombList id="bombsList" 
