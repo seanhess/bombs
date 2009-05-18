@@ -16,12 +16,19 @@
 			
 			[Bindable] private var char:Character;
 			
+			private var moves:Array = [];
+			private var currentMove:Point;
+			private var moving:Boolean = false;
+			
 			override public function set data(value:Object):void
 			{
 				super.data = value;
 				char = value as Character;
 			}
 			
+			/**
+			 * Dest has been updated
+			 */
 			private var destChanged:Boolean = false;
 			private function set dest(value:*):void
 			{
@@ -45,30 +52,43 @@
 				{
 					destChanged = false;
 					
-					moveChar.stop();
+					if (!moving)
+					{
+						moving = true;
+						moveChar.stop();
+						
+						currentMove = moves.shift() || new Point(char.destinationX, char.destinationY);
 					
-					var dx:int = Math.abs(char.destinationX - char.locationX);
-					var dy:int = Math.abs(char.destinationY - char.locationY);
-					
-					var xDuration:Number = BASE_DURATION * dx;
-					var yDuration:Number = BASE_DURATION * dy;
-					
-					var duration:Number = (xDuration > yDuration) ? xDuration : yDuration;
-					
-					animateX.duration = duration;
-					animateX.fromValue = char.locationX;
-					animateX.toValue = char.destinationX;
-					
-					animateY.duration = duration;
-					animateY.fromValue = char.locationY;
-					animateY.toValue = char.destinationY;
-					
-					moveChar.play();
+						var dx:int = Math.abs(currentMove.x - char.locationX);
+						var dy:int = Math.abs(currentMove.y - char.locationY);
+						
+						var xDuration:Number = BASE_DURATION * dx;
+						var yDuration:Number = BASE_DURATION * dy;
+						
+						var duration:Number = (xDuration > yDuration) ? xDuration : yDuration;
+						
+						animateX.duration = duration;
+						animateX.fromValue = char.locationX;
+						animateX.toValue = currentMove.x;
+						
+						animateY.duration = duration;
+						animateY.fromValue = char.locationY;
+						animateY.toValue = currentMove.y;
+						
+						moveChar.play();
+					}
+					else
+					{
+						moves.push(new Point(char.destinationX, char.destinationY));
+					}
 				}				
 			}
 
 			private function onMoved():void
 			{
+				moving = false;
+				destChanged = true;
+				invalidateProperties();
 				return;
 			}
 		]]>
