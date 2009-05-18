@@ -22,7 +22,7 @@
 			public static const BLAST_RADIUS:int = 20;
 			
 			[Bindable] public var playing:Boolean = false;
-			[Bindable] public var mainCharacter:Character;
+			[Bindable] public var mainCharacter:Character = new Character();
 			[Bindable] public var dead:Boolean = false;
 			
 			[Bindable] public var highscore:Character;
@@ -108,7 +108,6 @@
 			
 			protected function onInactive(event:Event):void
 			{
-				
 				var timer:CharacterTimer = event.target as CharacterTimer;
 					timer.removeEventListener(CharacterTimer.INACTIVE, onInactive);
 					
@@ -164,8 +163,6 @@
 			 */
 			protected function addBomb(event:SimpleListEvent):void
 			{
-				if (!playing) return;
-				
 				trace("[ UPDATE BOMB <- ] ");
 
 				var bomb:Bomb = event.item as Bomb;
