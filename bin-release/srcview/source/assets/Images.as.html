@@ -1,0 +1,53 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>Images.as</title>
+<link rel="stylesheet" type="text/css" href="../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">assets</span>
+<span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">assets</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">TokenAssets</span>;
+    
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">utils</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">Dictionary</span>;
+    
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">Images</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">BOY_PATH</span>:<span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span><span class="ActionScriptBracket/Brace"></span><span class="ActionScriptBracket/Brace"></span> <span class="ActionScriptString">"body"</span>;
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">CAT_GIRL_PATH</span>:<span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">"catgirl"</span>;
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">HORN_GIRL_PATH</span>:<span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">"horngirl"</span>;
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">PINK_GIRL_PATH</span>:<span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">"pinkgirl"</span>;
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">PRINCESS_GIRL_PATH</span>:<span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">"princessgirl"</span>;
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">CIRCLE_PATH</span>:<span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">"circle"</span>;
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">SPLAT_PATH</span>:<span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">"splat"</span>;
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">DEATH_EYES_PATH</span>:<span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">"death"</span>;
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">TIMER_PATH</span>:<span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">"timer"</span>;
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">images</span>:<span class="ActionScriptDefault_Text">Dictionary</span>;
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">Images</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">images</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Dictionary</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">true</span><span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptDefault_Text">images</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">BOY_PATH</span><span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">TokenAssets</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">BOY</span>;
+            <span class="ActionScriptDefault_Text">images</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">CAT_GIRL_PATH</span><span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">TokenAssets</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">CAT_GIRL</span>;
+            <span class="ActionScriptDefault_Text">images</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">HORN_GIRL_PATH</span><span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">TokenAssets</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">HORN_GIRL</span>;
+            <span class="ActionScriptDefault_Text">images</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">PINK_GIRL_PATH</span><span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">TokenAssets</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">PINK_GIRL</span>;
+            <span class="ActionScriptDefault_Text">images</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">PRINCESS_GIRL_PATH</span><span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">TokenAssets</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">PRINCESS_GIRL</span>;
+        
+            <span class="ActionScriptDefault_Text">images</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">CIRCLE_PATH</span><span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">TokenAssets</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">CIRCLE</span>;
+            <span class="ActionScriptDefault_Text">images</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">SPLAT_PATH</span><span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">TokenAssets</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">SPLAT</span>;
+            <span class="ActionScriptDefault_Text">images</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">DEATH_EYES_PATH</span><span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">TokenAssets</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">DEATH_EYES</span>;
+            <span class="ActionScriptDefault_Text">images</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">TIMER_PATH</span><span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">TokenAssets</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">TIMER</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getSource</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">path</span>:<span class="ActionScriptDefault_Text">String</span><span class="ActionScriptBracket/Brace">)</span>:<span class="ActionScriptDefault_Text">Class</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">images</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">path</span><span class="ActionScriptBracket/Brace">]</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptBracket/Brace"></span><span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace"></span><span class="ActionScriptBracket/Brace">}</span></pre></body>
+</html>
