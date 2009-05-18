@@ -45,6 +45,8 @@ package bombs.util
 		
 		public function add(bomb:Bomb):void
 		{
+			trace("BOMB => " + bomb.owner + " " + bomb.id);
+			
 			var message:MessageItem = new MessageItem(nodeName, null, bomb.id)
 				message.body = bomb;
 				
@@ -53,6 +55,8 @@ package bombs.util
 		
 		public function remove(bomb:Bomb):void
 		{
+			trace("BOMB Explode :: " + bomb.owner + " " + bomb.id); 
+			
 			if (contains(bomb))
 				node.retractItem(nodeName, bomb.id);
 		}
@@ -77,7 +81,7 @@ package bombs.util
 		}
 		
 		private function onItemReceive(event:CollectionNodeEvent):void
-		{
+		{			
 			var id:String = event.item.itemID;
 			var update:Object = event.item.body;
 			
@@ -91,6 +95,8 @@ package bombs.util
 				bomb.blastRadius = update.blastRadius;
 				bomb.fuse = update.fuse;
 				bomb.owner = update.owner;
+				
+			trace("BOMB <= " + bomb.owner + " " + bomb.id); 
 			
 			items[id] = bomb;
 			dispatchEvent(new SimpleListEvent(SimpleListEvent.ADD, bomb));

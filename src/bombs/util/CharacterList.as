@@ -111,9 +111,11 @@ package bombs.util
 		
 		private function onCharDelete(event:CollectionNodeEvent):void
 		{
+			
 			var name:String = event.nodeName;
 			var char:Character = characters[name];
-			
+
+			trace("Character Delete " + name);
 			delete characters[name];
 			
 			dispatchEvent(new SimpleListEvent(SimpleListEvent.REMOVE, char));

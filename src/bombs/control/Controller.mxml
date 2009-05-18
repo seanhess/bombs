@@ -108,16 +108,13 @@
 			
 			protected function onInactive(event:Event):void
 			{
+				
 				var timer:CharacterTimer = event.target as CharacterTimer;
 					timer.removeEventListener(CharacterTimer.INACTIVE, onInactive);
 					
 				var char:Character = timer.char;
-				
-				if (char == mainCharacter)
-				{
-					dead = true;
-					playing = false;
-				}
+
+				trace("INACTIVE : " + char.name); 
 	
 				characters.remove(char);
 				delete activeCharacters[char];
@@ -147,6 +144,12 @@
 			{
 				var char:Character = event.item as Character;
 				var timer:CharacterTimer = activeCharacters[char];
+				
+				if (char == mainCharacter)
+				{
+					dead = true;
+					playing = false;
+				}
 				
 				if (timer)
 					timer.stop();
@@ -188,7 +191,7 @@
 				if (bomb.space.intersects(mainCharacter.space))
 				{
 					// then you is dead! // 
-					trace(" - died ");
+					trace(" - Main Character Died ");
 					
 					mainCharacter.dead = true;
 					characters.remove(mainCharacter);
