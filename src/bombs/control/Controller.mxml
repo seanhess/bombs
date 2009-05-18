@@ -106,17 +106,19 @@
 			
 			protected function checkActivity(char:Character):void
 			{
+				var timer:CharacterTimer;
+				
 				if (activeCharacters[char] == null)
 				{
-					var timer:CharacterTimer = new CharacterTimer();
-						timer.checkInactivity(char);
-						timer.addEventListener(CharacterTimer.INACTIVE, onInactive);
+					timer = new CharacterTimer();
+					timer.checkInactivity(char);
+					timer.addEventListener(CharacterTimer.INACTIVE, onInactive);
 					
 					activeCharacters[char] = timer; 
 				}
 				else
 				{
-					var timer:CharacterTimer = activeCharacters[char];
+					timer = activeCharacters[char];
 					timer.active();
 				}
 			}

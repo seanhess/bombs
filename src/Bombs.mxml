@@ -5,7 +5,7 @@
 	applicationComplete="onAppComplete()"
 	backgroundColor="#FFFFFF"
 	backgroundGradientColors="[0xFFFFFF, 0xFFFFFF]"
-	>
+	 viewSourceURL="srcview/index.html">
 	
 	<mx:Script>
 		<![CDATA[
