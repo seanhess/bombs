@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<index>
+	<title>Source of Bombs</title>
+	<nodes>
+		<node label="src">
+			<node label="bombs.control" icon="packageIcon" expanded="true">
+				<node label="Controller.mxml" icon="mxmlIcon" url="source/bombs/control/Controller.mxml.html"/>
+			</node>
+			<node label="bombs.model" icon="packageIcon" expanded="true">
+				<node label="Bomb.as" icon="actionScriptIcon" url="source/bombs/model/Bomb.as.html"/>
+				<node label="Character.as" icon="actionScriptIcon" url="source/bombs/model/Character.as.html"/>
+			</node>
+			<node label="bombs.util" icon="packageIcon" expanded="true">
+				<node label="BombTimer.as" icon="actionScriptIcon" url="source/bombs/util/BombTimer.as.html"/>
+				<node label="CharacterTimer.as" icon="actionScriptIcon" url="source/bombs/util/CharacterTimer.as.html"/>
+				<node label="SharedBombList.as" icon="actionScriptIcon" url="source/bombs/util/SharedBombList.as.html"/>
+				<node label="SimpleListEvent.as" icon="actionScriptIcon" url="source/bombs/util/SimpleListEvent.as.html"/>
+				<node label="SimpleSharedList.as" icon="actionScriptIcon" url="source/bombs/util/SimpleSharedList.as.html"/>
+			</node>
+			<node label="bombs.view" icon="packageIcon" expanded="true">
+				<node label="DeadView.mxml" icon="mxmlIcon" url="source/bombs/view/DeadView.mxml.html"/>
+				<node label="GameView.mxml" icon="mxmlIcon" url="source/bombs/view/GameView.mxml.html"/>
+				<node label="LoginView.mxml" icon="mxmlIcon" url="source/bombs/view/LoginView.mxml.html"/>
+				<node label="MainView.mxml" icon="mxmlIcon" url="source/bombs/view/MainView.mxml.html"/>
+			</node>
+			<node label="bombs.view.layer" icon="packageIcon" expanded="true">
+				<node label="Layer.mxml" icon="mxmlIcon" url="source/bombs/view/layer/Layer.mxml.html"/>
+			</node>
+			<node label="bombs.view.render" icon="packageIcon" expanded="true">
+				<node label="BombRenderer.mxml" icon="mxmlIcon" url="source/bombs/view/render/BombRenderer.mxml.html"/>
+				<node label="CharacterRenderer.mxml" icon="mxmlIcon" url="source/bombs/view/render/CharacterRenderer.mxml.html"/>
+			</node>
+			<node selected="true" label="Bombs.mxml" icon="mxmlAppIcon" url="source/Bombs.mxml.html"/>
+		</node>
+	</nodes>
+</index>
