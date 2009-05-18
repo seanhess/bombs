@@ -10,17 +10,23 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import mx.controls.Alert;
 			import bombs.model.Character;
 			
 			[Bindable] public var highscore:Character;
 			[Bindable] public var showLogin:Boolean = true;
 			[Bindable] public var showDead:Boolean = false;
+			
+			private function help():void
+			{
+				Alert.show("Click to move, hit space to lay a bomb. Don't die", "Instructions");
+			}
 		]]>
 	</mx:Script>
 	
 	<mx:Image source="assets/image/stripes.jpg" width="100%" height="100%" maintainAspectRatio="false"/>
 	
-	<mx:Canvas horizontalCenter="0" verticalCenter="0" width="1000" height="800" horizontalScrollPolicy="off" verticalScrollPolicy="off">
+	<mx:Canvas horizontalCenter="0" verticalCenter="0" width="1000" height="700" horizontalScrollPolicy="off" verticalScrollPolicy="off">
 		<mx:Canvas width="80%" height="80%" 
 			borderStyle="solid" borderThickness="10"
 			backgroundColor="#FFFFFF" 
@@ -37,6 +43,8 @@
 			<mx:Label text="High Score: {highscore.kills} kills by {highscore.name}" fontWeight="bold" fontSize="18"/>
 		</mx:HBox>
 		<mx:Image source="assets/image/logo_flat.png"/>
+		<mx:Button icon="@Embed('assets/image/help_small.png')" left="100" bottom="30" click="help()"/>
 	</mx:Canvas>
+	
 				
 </mx:Canvas>
