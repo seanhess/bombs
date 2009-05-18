@@ -16,8 +16,8 @@
 			import mx.events.CollectionEvent;
 			
 			// CONSTS // 
-			public static const ROOM:String = "http://connectnow.acrobat.com/seanhessnet/game2";
-			public static const USER:String = "seanhess@gmail.com";
+			public static const ROOM:String = "http://connectnow.acrobat.com/seanafcs1/bombs";
+			public static const USER:String = "seanhess+afcs1@gmail.com";
 			public static const PASS:String = "cocomo";
 			
 			public static const CHARACTER_SIZE:int = 20;
@@ -275,7 +275,7 @@
 	<ns:LocalAuthenticator id="local"/>
 
 	<!-- Session -->
-	<ns:ConnectSession id="session" authenticator="{local}" roomURL="{ROOM}"/>
+	<ns:ConnectSession id="session" authenticator="{auth}" roomURL="{ROOM}"/>
 	
 	<!-- Sharing -->
 	<util:SimpleSharedList id="characters" 
