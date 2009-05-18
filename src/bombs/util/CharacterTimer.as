@@ -17,7 +17,7 @@ package bombs.util
 	 */
 	public class CharacterTimer extends EventDispatcher
 	{
-		public static const SECONDS:int = 10;
+		public static const SECONDS:int = 20;
 		public static const INACTIVE:String = "inactive";
 		 
 		public var char:Character;
